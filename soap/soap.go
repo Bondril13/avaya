@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/xml"
+	//	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
@@ -111,7 +112,7 @@ Loop:
 	return nil
 }
 
-func (f *SOAPFault) Error() string {
+func (f SOAPFault) Error() string {
 	return f.String
 }
 
@@ -138,7 +139,7 @@ func (s *SOAPClient) Call(soapAction string, request, response interface{}) erro
 	buffer := new(bytes.Buffer)
 
 	encoder := xml.NewEncoder(buffer)
-	//encoder.Indent("  ", "    ")
+	encoder.Indent("  ", "    ")
 
 	if err := encoder.Encode(envelope); err != nil {
 		return err
@@ -203,4 +204,9 @@ func (s *SOAPClient) Call(soapAction string, request, response interface{}) erro
 	}
 
 	return nil
+}
+
+type CIDateTime struct {
+	//	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com CIDateTime"`
+	Milliseconds int64 `xml:"milliseconds,omitempty"`
 }

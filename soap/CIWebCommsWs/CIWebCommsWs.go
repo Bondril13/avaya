@@ -56,7 +56,7 @@ type ReadChatMessage struct {
 
 	LastReadTime *CIDateTime `xml:"lastReadTime,omitempty"`
 
-	IsWriting bool `xml:"isWriting,omitempty"`
+	IsWriting bool `xml:"isWriting"`
 
 	SessionKey string `xml:"sessionKey,omitempty"`
 }
@@ -65,7 +65,7 @@ type ReadChatMessage struct {
 type ReadChatMessageResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com ReadChatMessageResponse"`
 
-	ReadChatMessageResult *CIMultipleChatMessageReadType `xml:"ReadChatMessageResult,omitempty"`
+	ReadChatMessageResult *CIMultipleChatMessageReadType //`xml:"ReadChatMessageResult,omitempty"`
 }
 
 // RequestChatHistory -
@@ -115,7 +115,7 @@ type UpdateAliveTime struct {
 type UpdateAliveTimeResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com UpdateAliveTimeResponse"`
 
-	UpdateAliveTimeResult *CIDateTime `xml:"UpdateAliveTimeResult,omitempty"`
+	UpdateAliveTimeResult *soap.CIDateTime `xml:"UpdateAliveTimeResult,omitempty"`
 }
 
 // UpdateAliveTimeAndUpdateIsTyping -
@@ -126,14 +126,14 @@ type UpdateAliveTimeAndUpdateIsTyping struct {
 
 	SessionKey string `xml:"sessionKey,omitempty"`
 
-	IsTyping bool `xml:"isTyping,omitempty"`
+	IsTyping bool `xml:"isTyping"`
 }
 
 // UpdateAliveTimeAndUpdateIsTypingResponse -
 type UpdateAliveTimeAndUpdateIsTypingResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com UpdateAliveTimeAndUpdateIsTypingResponse"`
 
-	UpdateAliveTimeAndUpdateIsTypingResult *CIDateTime `xml:"UpdateAliveTimeAndUpdateIsTypingResult,omitempty"`
+	UpdateAliveTimeAndUpdateIsTypingResult *soap.CIDateTime `xml:"UpdateAliveTimeAndUpdateIsTypingResult,omitempty"`
 }
 
 // AbandonQueuingWebCommsContact -
@@ -164,7 +164,7 @@ type AbandonQueuingWCContact struct {
 
 	ClosedReasonCodeValue int64 `xml:"closedReasonCodeValue,omitempty"`
 
-	ClosedReasonCodeSpecified bool `xml:"closedReasonCodeSpecified,omitempty"`
+	ClosedReasonCodeSpecified bool `xml:"closedReasonCodeSpecified"`
 
 	SessionKey string `xml:"sessionKey,omitempty"`
 }
@@ -241,68 +241,69 @@ type CIChatMessageType string
 
 const (
 	// CIChatMessageTypeChatMessagefromCustomer -
-	CIChatMessageTypeChatMessagefromCustomer CIChatMessageType = "ChatMessagefromCustomer"
+	CIChatMessageTypeChatMessagefromCustomer CIChatMessageType = "Chat_Message_from_Customer"
 
 	//CIChatMessageTypeChatMessagefromAgent -
-	CIChatMessageTypeChatMessagefromAgent CIChatMessageType = "ChatMessagefromAgent"
+	CIChatMessageTypeChatMessagefromAgent CIChatMessageType = "Chat_Message_from_Agent"
 
 	//CIChatMessageTypePagePushedbyCustomer -
-	CIChatMessageTypePagePushedbyCustomer CIChatMessageType = "PagePushedbyCustomer"
+	CIChatMessageTypePagePushedbyCustomer CIChatMessageType = "Page_Pushed_by_Customer"
 
 	//CIChatMessageTypePagePushedbyAgent -
-	CIChatMessageTypePagePushedbyAgent CIChatMessageType = "PagePushedbyAgent"
+	CIChatMessageTypePagePushedbyAgent CIChatMessageType = "Page_Pushed_by_Agent"
 
 	//CIChatMessageTypeFormSharedbyCustomer -
-	CIChatMessageTypeFormSharedbyCustomer CIChatMessageType = "FormSharedbyCustomer"
+	CIChatMessageTypeFormSharedbyCustomer CIChatMessageType = "Form_Shared_by_Customer"
 
 	//CIChatMessageTypeFormSharedbyAgent -
-	CIChatMessageTypeFormSharedbyAgent CIChatMessageType = "FormSharedbyAgent"
+	CIChatMessageTypeFormSharedbyAgent CIChatMessageType = "Form_Shared_by_Agent"
 
 	//CIChatMessageTypeCallMeRequestfromCustomer -
-	CIChatMessageTypeCallMeRequestfromCustomer CIChatMessageType = "CallMeRequestfromCustomer"
+	CIChatMessageTypeCallMeRequestfromCustomer CIChatMessageType = "Call_Me_Request_from_Customer"
 
 	//CIChatMessageTypePagePreviewedbyCustomer -
-	CIChatMessageTypePagePreviewedbyCustomer CIChatMessageType = "PagePreviewedbyCustomer"
+	CIChatMessageTypePagePreviewedbyCustomer CIChatMessageType = "Page_Previewed_by_Customer"
 
 	//CIChatMessageTypePagePreviewedbyAgent -
-	CIChatMessageTypePagePreviewedbyAgent CIChatMessageType = "PagePreviewedbyAgent"
+	CIChatMessageTypePagePreviewedbyAgent CIChatMessageType = "Page_Previewed_by_Agent"
 
 	// CIChatMessageTypeSessionDisconnectedbyCustomer -
-	CIChatMessageTypeSessionDisconnectedbyCustomer CIChatMessageType = "SessionDisconnectedbyCustomer"
+	CIChatMessageTypeSessionDisconnectedbyCustomer CIChatMessageType = "Session_Disconnected_by_Customer"
 
 	//CIChatMessageTypeSessionDisconnectedbyAgent -
-	CIChatMessageTypeSessionDisconnectedbyAgent CIChatMessageType = "SessionDisconnectedbyAgent"
+	CIChatMessageTypeSessionDisconnectedbyAgent CIChatMessageType = "Session_Disconnected_by_Agent"
 
 	//CIChatMessageTypePrivateChatMessagebetweenAgents -
-	CIChatMessageTypePrivateChatMessagebetweenAgents CIChatMessageType = "PrivateChatMessagebetweenAgents"
+	CIChatMessageTypePrivateChatMessagebetweenAgents CIChatMessageType = "Private_Chat_Message_between_Agents"
 
 	//CIChatMessageTypeComfortMessage -
-	CIChatMessageTypeComfortMessage CIChatMessageType = "ComfortMessage"
+	CIChatMessageTypeComfortMessage CIChatMessageType = "Comfort_Message"
 )
 
 // CIDateTime -
 type CIDateTime struct {
-	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com CIDateTime"`
+	//	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com CIDateTime"`
 
-	Milliseconds int64 `xml:"milliseconds,omitempty"`
+	Milliseconds int64 `xml:"http://datatypes.ci.ccmm.applications.nortel.com milliseconds,omitempty"`
 }
 
 // CIMultipleChatMessageReadType -
 type CIMultipleChatMessageReadType struct {
-	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com CIMultipleChatMessageReadType"`
+	//XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com ReadChatMessageResult"` // CIMultipleChatMessageReadType"`
+	XMLName xml.Name `xml:"ReadChatMessageResult"` // CIMultipleChatMessageReadType"`
 
-	ListOfChatMessages *ArrayOfCIChatMessageReadType `xml:"listOfChatMessages,omitempty"`
+	ListOfChatMessages *ArrayOfCIChatMessageReadType `xml:"listOfChatMessages"`
 
-	IsWriting bool `xml:"isWriting,omitempty"`
+	IsWriting bool `xml:"isWriting"`
 
-	LastReadTime *CIDateTime `xml:"lastReadTime,omitempty"`
+	LastReadTime *soap.CIDateTime `xml:"lastReadTime"`
 }
 
 // ArrayOfCIChatMessageReadType -
 type ArrayOfCIChatMessageReadType struct {
-	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com ArrayOfCIChatMessageReadType"`
+	//	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com listOfArrayOfCIChatMessageReadType"`
 
-	CIChatMessageReadType []*CIChatMessageReadType `xml:"CIChatMessageReadType,omitempty"`
+	CIChatMessageReadType []*CIChatMessageReadType `xml:"CIChatMessageReadType"`
 }
 
 // CIChatMessageReadType -
@@ -313,7 +314,7 @@ type CIChatMessageReadType struct {
 
 	HiddenMessage string `xml:"hiddenMessage,omitempty"`
 
-	WriteTime *CIDateTime `xml:"writeTime,omitempty"`
+	WriteTime *soap.CIDateTime `xml:"writeTime,omitempty"`
 
 	ChatMessageType *CIChatMessageType `xml:"chatMessageType,omitempty"`
 }

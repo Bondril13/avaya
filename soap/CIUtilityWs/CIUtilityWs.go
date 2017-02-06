@@ -177,7 +177,7 @@ type GetServerTime struct {
 type GetServerTimeResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com GetServerTimeResponse"`
 
-	GetServerTimeResult *CIDateTime `xml:"GetServerTimeResult,omitempty"`
+	GetServerTimeResult *soap.CIDateTime `xml:"GetServerTimeResult,omitempty"`
 }
 
 type GetServerUTCTime struct {
@@ -189,7 +189,7 @@ type GetServerUTCTime struct {
 type GetServerUTCTimeResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com GetServerUTCTimeResponse"`
 
-	GetServerUTCTimeResult *CIDateTime `xml:"GetServerUTCTimeResult,omitempty"`
+	GetServerUTCTimeResult *soap.CIDateTime `xml:"GetServerUTCTimeResult,omitempty"`
 }
 
 type GetServerRAWTime struct {
@@ -201,7 +201,7 @@ type GetServerRAWTime struct {
 type GetServerRAWTimeResponse struct {
 	XMLName xml.Name `xml:"http://webservices.ci.ccmm.applications.nortel.com GetServerRAWTimeResponse"`
 
-	GetServerRAWTimeResult *CIDateTime `xml:"GetServerRAWTimeResult,omitempty"`
+	GetServerRAWTimeResult *soap.CIDateTime `xml:"GetServerRAWTimeResult,omitempty"`
 }
 
 type TimeStampToMilliseconds struct {
@@ -298,7 +298,7 @@ type CICustomerReadType struct {
 
 	Username string `xml:"username,omitempty"`
 
-	RegisterDate *CIDateTime `xml:"registerDate"`
+	RegisterDate *soap.CIDateTime `xml:"registerDate"`
 
 	AddressList *ArrayOfCIAddressReadType `xml:"addressList"`
 
@@ -313,12 +313,6 @@ type CICustomerReadType struct {
 	DefaultPhoneNumber *CIPhoneNumberReadType `xml:"defaultPhoneNumber"`
 
 	DefaultEmailAddress *CIEmailAddressReadType `xml:"defaultEmailAddress"`
-}
-
-type CIDateTime struct {
-	//	XMLName xml.Name `xml:"http://datatypes.ci.ccmm.applications.nortel.com CIDateTime"`
-
-	Milliseconds int64 `xml:"milliseconds,omitempty"`
 }
 
 type ArrayOfCIAddressReadType struct {
