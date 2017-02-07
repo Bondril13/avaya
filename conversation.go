@@ -86,6 +86,9 @@ func (c *DirectConversation) Close() {
 	c.closed = true
 	if c.answered {
 		log.Println("Close() answered")
+		if err := writeMessage(c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
+			log.Println("Close(): failed to send disconnect message:", err)
+		}
 	} else {
 		log.Println("Close() abandoning queue")
 		AbandonQue(c.sessionKey, c.contactID, "The conversation has ended.")

@@ -145,16 +145,19 @@ func readMessages(sessionKey string, contactID int64, isWriting bool, lastReadTi
 	return result, nil
 }
 
-var writeMessageType = CIWebCommsWs.CIChatMessageTypeChatMessagefromCustomer
+const (
+	fromCustomer         = CIWebCommsWs.CIChatMessageTypeChatMessagefromCustomer
+	customerDisconnected = CIWebCommsWs.CIChatMessageTypeSessionDisconnectedbyCustomer
+)
 
-func writeMessage(sessionKey string, contactID int64, message string) error {
+func writeMessage(sessionKey string, contactID int64, message string, msgType CIWebCommsWs.CIChatMessageType) error {
 
 	ciWebComms := CIWebCommsWs.NewSoap("", false, &soap.BasicAuth{})
 	resp, err := ciWebComms.WriteChatMessage(&CIWebCommsWs.WriteChatMessage{
 		ContactID:       contactID,
 		Message:         message,
 		SessionKey:      sessionKey,
-		ChatMessageType: &writeMessageType,
+		ChatMessageType: &msgType,
 	})
 
 	if err != nil {
