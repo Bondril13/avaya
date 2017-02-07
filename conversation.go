@@ -5,16 +5,23 @@ import (
 	"log"
 )
 
-// Conversation - A conversation between a client and an advisor.
-type Conversation struct {
+type Conversation interface {
+	Keepalive(isTyping bool) error
+	WriteMessage(text string) error
+	ReadMessages() ([]Message, bool, error)
+	Close()
+	Name() string
+}
+
+// DirectConversation - A conversation between a client and an advisor.
+type DirectConversation struct {
 	closed       bool
 	answered     bool
-	Name         string
-	Email        string
-	SessionKey   string
-	CustomerID   int64
-	ContactID    int64
-	Skillset     *Skillset
+	name         string
+	sessionKey   string
+	customerID   int64
+	contactID    int64
+	skillset     *Skillset
 	lastReadTime int64
 }
 
@@ -26,20 +33,23 @@ type Message struct {
 	Time   int64
 }
 
-func (c *Conversation) Keepalive(isTyping bool) error {
-	return keepAlive(c.SessionKey, c.ContactID, isTyping)
+func (c *DirectConversation) CustomerID() int64 { return c.customerID }
+func (c *DirectConversation) Name() string      { return c.name }
+
+func (c *DirectConversation) Keepalive(isTyping bool) error {
+	return keepAlive(c.sessionKey, c.contactID, isTyping)
 }
 
-func (c *Conversation) WriteMessage(message string) error {
-	return writeMessage(c.SessionKey, c.ContactID, message)
+func (c *DirectConversation) WriteMessage(message string) error {
+	return writeMessage(c.sessionKey, c.contactID, message, fromCustomer)
 }
 
-func (c *Conversation) ReadMessages() ([]Message, bool, error) {
+func (c *DirectConversation) ReadMessages() ([]Message, bool, error) {
 	if c.closed {
 		return nil, false, fmt.Errorf("Cannot read messages - conversation is closed")
 	}
 
-	soapMessages, err := readMessages(c.SessionKey, c.ContactID, false, c.lastReadTime)
+	soapMessages, err := readMessages(c.sessionKey, c.contactID, false, c.lastReadTime)
 	if err != nil {
 		return nil, false, err
 	}
@@ -69,7 +79,7 @@ func (c *Conversation) ReadMessages() ([]Message, bool, error) {
 	return messages, advisorTyping, nil
 }
 
-func (c *Conversation) Close() {
+func (c *DirectConversation) Close() {
 	if c.closed {
 		return
 	}
@@ -78,13 +88,13 @@ func (c *Conversation) Close() {
 		log.Println("Close() answered")
 	} else {
 		log.Println("Close() abandoning queue")
-		AbandonQue(c.SessionKey, c.ContactID, "The conversation has ended.")
+		AbandonQue(c.sessionKey, c.contactID, "The conversation has ended.")
 	}
-	EndSession(c.SessionKey, c.ContactID)
+	EndSession(c.sessionKey, c.contactID)
 }
 
 // NewConversation - Creates a new Conversation
-func NewConversation(name, email, skillsetName string) (*Conversation, error) {
+func NewConversation(name, email, skillsetName string) (Conversation, error) {
 	sessionID, anonymousID, err := anonymousLogin()
 	if err != nil {
 		return nil, err
@@ -105,11 +115,10 @@ func NewConversation(name, email, skillsetName string) (*Conversation, error) {
 		return nil, err
 	}
 
-	return &Conversation{
+	return &DirectConversation{
 		false,
 		false,
 		name,
-		email,
 		sessionID,
 		customerID,
 		contactID,
