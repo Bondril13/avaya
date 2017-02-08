@@ -57,6 +57,9 @@ func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool,
 		if soapMessages.ListOfChatMessages != nil {
 			for _, m := range soapMessages.ListOfChatMessages.CIChatMessageReadType {
 				c.answered = true
+				if *m.ChatMessageType == agentDisconnected {
+					c.closed = true
+				}
 				messages = append(messages, Message{
 					Text:   m.ChatMessage,
 					Hidden: m.HiddenMessage,
