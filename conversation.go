@@ -19,8 +19,3 @@ type Message struct {
 	Hidden string
 	Time   int64
 }
-
-// NewConversation - Creates a new Conversation
-func NewConversation(name, email, skillsetName string) (Conversation, error) {
-	return newDirectConversation(name, email, skillsetName)
-}
