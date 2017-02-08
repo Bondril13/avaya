@@ -1,6 +1,7 @@
 package CIWebCommsWs
 
 import (
+	"context"
 	"encoding/xml"
 	"tbp/avaya/soap"
 	"time"
@@ -401,9 +402,9 @@ func (service *Soap) SetHeader(header interface{}) {
 }
 
 // CreateWebCommsSession -
-func (service *Soap) CreateWebCommsSession(request *CreateWebCommsSession) (*CreateWebCommsSessionResponse, error) {
+func (service *Soap) CreateWebCommsSession(ctx context.Context, request *CreateWebCommsSession) (*CreateWebCommsSessionResponse, error) {
 	response := new(CreateWebCommsSessionResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/CreateWebCommsSession", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/CreateWebCommsSession", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -412,9 +413,9 @@ func (service *Soap) CreateWebCommsSession(request *CreateWebCommsSession) (*Cre
 }
 
 // WriteChatMessage -
-func (service *Soap) WriteChatMessage(request *WriteChatMessage) (*WriteChatMessageResponse, error) {
+func (service *Soap) WriteChatMessage(ctx context.Context, request *WriteChatMessage) (*WriteChatMessageResponse, error) {
 	response := new(WriteChatMessageResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/WriteChatMessage", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/WriteChatMessage", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -423,9 +424,9 @@ func (service *Soap) WriteChatMessage(request *WriteChatMessage) (*WriteChatMess
 }
 
 // ReadChatMessage -
-func (service *Soap) ReadChatMessage(request *ReadChatMessage) (*ReadChatMessageResponse, error) {
+func (service *Soap) ReadChatMessage(ctx context.Context, request *ReadChatMessage) (*ReadChatMessageResponse, error) {
 	response := new(ReadChatMessageResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadChatMessage", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadChatMessage", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -434,9 +435,9 @@ func (service *Soap) ReadChatMessage(request *ReadChatMessage) (*ReadChatMessage
 }
 
 // RequestChatHistory -
-func (service *Soap) RequestChatHistory(request *RequestChatHistory) (*RequestChatHistoryResponse, error) {
+func (service *Soap) RequestChatHistory(ctx context.Context, request *RequestChatHistory) (*RequestChatHistoryResponse, error) {
 	response := new(RequestChatHistoryResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RequestChatHistory", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RequestChatHistory", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -445,9 +446,9 @@ func (service *Soap) RequestChatHistory(request *RequestChatHistory) (*RequestCh
 }
 
 // GetWebOnHoldURLs -
-func (service *Soap) GetWebOnHoldURLs(request *GetWebOnHoldURLs) (*GetWebOnHoldURLsResponse, error) {
+func (service *Soap) GetWebOnHoldURLs(ctx context.Context, request *GetWebOnHoldURLs) (*GetWebOnHoldURLsResponse, error) {
 	response := new(GetWebOnHoldURLsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetWebOnHoldURLs", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetWebOnHoldURLs", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -456,9 +457,9 @@ func (service *Soap) GetWebOnHoldURLs(request *GetWebOnHoldURLs) (*GetWebOnHoldU
 }
 
 // UpdateAliveTime -
-func (service *Soap) UpdateAliveTime(request *UpdateAliveTime) (*UpdateAliveTimeResponse, error) {
+func (service *Soap) UpdateAliveTime(ctx context.Context, request *UpdateAliveTime) (*UpdateAliveTimeResponse, error) {
 	response := new(UpdateAliveTimeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateAliveTime", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateAliveTime", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -467,9 +468,9 @@ func (service *Soap) UpdateAliveTime(request *UpdateAliveTime) (*UpdateAliveTime
 }
 
 // UpdateAliveTimeAndUpdateIsTyping -
-func (service *Soap) UpdateAliveTimeAndUpdateIsTyping(request *UpdateAliveTimeAndUpdateIsTyping) (*UpdateAliveTimeAndUpdateIsTypingResponse, error) {
+func (service *Soap) UpdateAliveTimeAndUpdateIsTyping(ctx context.Context, request *UpdateAliveTimeAndUpdateIsTyping) (*UpdateAliveTimeAndUpdateIsTypingResponse, error) {
 	response := new(UpdateAliveTimeAndUpdateIsTypingResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateAliveTimeAndUpdateIsTyping", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateAliveTimeAndUpdateIsTyping", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -478,9 +479,9 @@ func (service *Soap) UpdateAliveTimeAndUpdateIsTyping(request *UpdateAliveTimeAn
 }
 
 // AbandonQueuingWebCommsContact -
-func (service *Soap) AbandonQueuingWebCommsContact(request *AbandonQueuingWebCommsContact) (*AbandonQueuingWebCommsContactResponse, error) {
+func (service *Soap) AbandonQueuingWebCommsContact(ctx context.Context, request *AbandonQueuingWebCommsContact) (*AbandonQueuingWebCommsContactResponse, error) {
 	response := new(AbandonQueuingWebCommsContactResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AbandonQueuingWebCommsContact", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AbandonQueuingWebCommsContact", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -489,9 +490,9 @@ func (service *Soap) AbandonQueuingWebCommsContact(request *AbandonQueuingWebCom
 }
 
 // AbandonQueuingWCContact -
-func (service *Soap) AbandonQueuingWCContact(request *AbandonQueuingWCContact) (*AbandonQueuingWCContactResponse, error) {
+func (service *Soap) AbandonQueuingWCContact(ctx context.Context, request *AbandonQueuingWCContact) (*AbandonQueuingWCContactResponse, error) {
 	response := new(AbandonQueuingWCContactResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AbandonQueuingWCContact", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AbandonQueuingWCContact", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -500,9 +501,9 @@ func (service *Soap) AbandonQueuingWCContact(request *AbandonQueuingWCContact) (
 }
 
 // GetCustomerTextChatLabel -
-func (service *Soap) GetCustomerTextChatLabel(request *GetCustomerTextChatLabel) (*GetCustomerTextChatLabelResponse, error) {
+func (service *Soap) GetCustomerTextChatLabel(ctx context.Context, request *GetCustomerTextChatLabel) (*GetCustomerTextChatLabelResponse, error) {
 	response := new(GetCustomerTextChatLabelResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerTextChatLabel", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerTextChatLabel", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -511,9 +512,9 @@ func (service *Soap) GetCustomerTextChatLabel(request *GetCustomerTextChatLabel)
 }
 
 // GetCustomerTextChatName -
-func (service *Soap) GetCustomerTextChatName(request *GetCustomerTextChatName) (*GetCustomerTextChatNameResponse, error) {
+func (service *Soap) GetCustomerTextChatName(ctx context.Context, request *GetCustomerTextChatName) (*GetCustomerTextChatNameResponse, error) {
 	response := new(GetCustomerTextChatNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerTextChatName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerTextChatName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -522,9 +523,9 @@ func (service *Soap) GetCustomerTextChatName(request *GetCustomerTextChatName) (
 }
 
 // GetTrunkAccessCode -
-func (service *Soap) GetTrunkAccessCode(request *GetTrunkAccessCode) (*GetTrunkAccessCodeResponse, error) {
+func (service *Soap) GetTrunkAccessCode(ctx context.Context, request *GetTrunkAccessCode) (*GetTrunkAccessCodeResponse, error) {
 	response := new(GetTrunkAccessCodeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetTrunkAccessCode", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetTrunkAccessCode", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -533,9 +534,9 @@ func (service *Soap) GetTrunkAccessCode(request *GetTrunkAccessCode) (*GetTrunkA
 }
 
 // GetContactOnHoldMessages -
-func (service *Soap) GetContactOnHoldMessages(request *GetContactOnHoldMessages) (*GetContactOnHoldMessagesResponse, error) {
+func (service *Soap) GetContactOnHoldMessages(ctx context.Context, request *GetContactOnHoldMessages) (*GetContactOnHoldMessagesResponse, error) {
 	response := new(GetContactOnHoldMessagesResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetContactOnHoldMessages", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetContactOnHoldMessages", request, response)
 	if err != nil {
 		return nil, err
 	}

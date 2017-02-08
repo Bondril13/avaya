@@ -1,6 +1,7 @@
 package CICustomerWs
 
 import (
+	"context"
 	"encoding/xml"
 	"tbp/avaya/soap"
 	"time"
@@ -1166,9 +1167,9 @@ func (service *Soap) SetHeader(header interface{}) {
 	service.client.SetHeader(header)
 }
 
-func (service *Soap) RegisterNewCustomer(request *RegisterNewCustomer) (*RegisterNewCustomerResponse, error) {
+func (service *Soap) RegisterNewCustomer(ctx context.Context, request *RegisterNewCustomer) (*RegisterNewCustomerResponse, error) {
 	response := new(RegisterNewCustomerResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RegisterNewCustomer", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RegisterNewCustomer", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1176,9 +1177,9 @@ func (service *Soap) RegisterNewCustomer(request *RegisterNewCustomer) (*Registe
 	return response, nil
 }
 
-func (service *Soap) RegisterAnonymousCustomer(request *RegisterAnonymousCustomer) (*RegisterAnonymousCustomerResponse, error) {
+func (service *Soap) RegisterAnonymousCustomer(ctx context.Context, request *RegisterAnonymousCustomer) (*RegisterAnonymousCustomerResponse, error) {
 	response := new(RegisterAnonymousCustomerResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RegisterAnonymousCustomer", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RegisterAnonymousCustomer", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1186,9 +1187,9 @@ func (service *Soap) RegisterAnonymousCustomer(request *RegisterAnonymousCustome
 	return response, nil
 }
 
-func (service *Soap) RequestTextChat(request *RequestTextChat) (*RequestTextChatResponse, error) {
+func (service *Soap) RequestTextChat(ctx context.Context, request *RequestTextChat) (*RequestTextChatResponse, error) {
 	response := new(RequestTextChatResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RequestTextChat", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RequestTextChat", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1196,9 +1197,9 @@ func (service *Soap) RequestTextChat(request *RequestTextChat) (*RequestTextChat
 	return response, nil
 }
 
-func (service *Soap) RequestScheduledCallback(request *RequestScheduledCallback) (*RequestScheduledCallbackResponse, error) {
+func (service *Soap) RequestScheduledCallback(ctx context.Context, request *RequestScheduledCallback) (*RequestScheduledCallbackResponse, error) {
 	response := new(RequestScheduledCallbackResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RequestScheduledCallback", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RequestScheduledCallback", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1206,9 +1207,9 @@ func (service *Soap) RequestScheduledCallback(request *RequestScheduledCallback)
 	return response, nil
 }
 
-func (service *Soap) RequestScheduledCallbackUTC(request *RequestScheduledCallbackUTC) (*RequestScheduledCallbackUTCResponse, error) {
+func (service *Soap) RequestScheduledCallbackUTC(ctx context.Context, request *RequestScheduledCallbackUTC) (*RequestScheduledCallbackUTCResponse, error) {
 	response := new(RequestScheduledCallbackUTCResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RequestScheduledCallbackUTC", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RequestScheduledCallbackUTC", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1216,9 +1217,9 @@ func (service *Soap) RequestScheduledCallbackUTC(request *RequestScheduledCallba
 	return response, nil
 }
 
-func (service *Soap) RequestImmediateCallback(request *RequestImmediateCallback) (*RequestImmediateCallbackResponse, error) {
+func (service *Soap) RequestImmediateCallback(ctx context.Context, request *RequestImmediateCallback) (*RequestImmediateCallbackResponse, error) {
 	response := new(RequestImmediateCallbackResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RequestImmediateCallback", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RequestImmediateCallback", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1226,9 +1227,9 @@ func (service *Soap) RequestImmediateCallback(request *RequestImmediateCallback)
 	return response, nil
 }
 
-func (service *Soap) SendPasswordReminder(request *SendPasswordReminder) (*SendPasswordReminderResponse, error) {
+func (service *Soap) SendPasswordReminder(ctx context.Context, request *SendPasswordReminder) (*SendPasswordReminderResponse, error) {
 	response := new(SendPasswordReminderResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/SendPasswordReminder", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/SendPasswordReminder", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1236,9 +1237,9 @@ func (service *Soap) SendPasswordReminder(request *SendPasswordReminder) (*SendP
 	return response, nil
 }
 
-func (service *Soap) ReadFirstBlockOfContacts(request *ReadFirstBlockOfContacts) (*ReadFirstBlockOfContactsResponse, error) {
+func (service *Soap) ReadFirstBlockOfContacts(ctx context.Context, request *ReadFirstBlockOfContacts) (*ReadFirstBlockOfContactsResponse, error) {
 	response := new(ReadFirstBlockOfContactsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadFirstBlockOfContacts", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadFirstBlockOfContacts", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1246,9 +1247,9 @@ func (service *Soap) ReadFirstBlockOfContacts(request *ReadFirstBlockOfContacts)
 	return response, nil
 }
 
-func (service *Soap) ReadLastBlockOfContacts(request *ReadLastBlockOfContacts) (*ReadLastBlockOfContactsResponse, error) {
+func (service *Soap) ReadLastBlockOfContacts(ctx context.Context, request *ReadLastBlockOfContacts) (*ReadLastBlockOfContactsResponse, error) {
 	response := new(ReadLastBlockOfContactsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadLastBlockOfContacts", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadLastBlockOfContacts", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1256,9 +1257,9 @@ func (service *Soap) ReadLastBlockOfContacts(request *ReadLastBlockOfContacts) (
 	return response, nil
 }
 
-func (service *Soap) ReadPreviousBlockOfContacts(request *ReadPreviousBlockOfContacts) (*ReadPreviousBlockOfContactsResponse, error) {
+func (service *Soap) ReadPreviousBlockOfContacts(ctx context.Context, request *ReadPreviousBlockOfContacts) (*ReadPreviousBlockOfContactsResponse, error) {
 	response := new(ReadPreviousBlockOfContactsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadPreviousBlockOfContacts", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadPreviousBlockOfContacts", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1266,9 +1267,9 @@ func (service *Soap) ReadPreviousBlockOfContacts(request *ReadPreviousBlockOfCon
 	return response, nil
 }
 
-func (service *Soap) ReadNextBlockOfContacts(request *ReadNextBlockOfContacts) (*ReadNextBlockOfContactsResponse, error) {
+func (service *Soap) ReadNextBlockOfContacts(ctx context.Context, request *ReadNextBlockOfContacts) (*ReadNextBlockOfContactsResponse, error) {
 	response := new(ReadNextBlockOfContactsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadNextBlockOfContacts", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadNextBlockOfContacts", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1276,9 +1277,9 @@ func (service *Soap) ReadNextBlockOfContacts(request *ReadNextBlockOfContacts) (
 	return response, nil
 }
 
-func (service *Soap) GetNumberOfContactsByTime(request *GetNumberOfContactsByTime) (*GetNumberOfContactsByTimeResponse, error) {
+func (service *Soap) GetNumberOfContactsByTime(ctx context.Context, request *GetNumberOfContactsByTime) (*GetNumberOfContactsByTimeResponse, error) {
 	response := new(GetNumberOfContactsByTimeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetNumberOfContactsByTime", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetNumberOfContactsByTime", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1286,9 +1287,9 @@ func (service *Soap) GetNumberOfContactsByTime(request *GetNumberOfContactsByTim
 	return response, nil
 }
 
-func (service *Soap) ReadCustomer(request *ReadCustomer) (*ReadCustomerResponse, error) {
+func (service *Soap) ReadCustomer(ctx context.Context, request *ReadCustomer) (*ReadCustomerResponse, error) {
 	response := new(ReadCustomerResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadCustomer", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadCustomer", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1296,9 +1297,9 @@ func (service *Soap) ReadCustomer(request *ReadCustomer) (*ReadCustomerResponse,
 	return response, nil
 }
 
-func (service *Soap) GetDefaultAddress(request *GetDefaultAddress) (*GetDefaultAddressResponse, error) {
+func (service *Soap) GetDefaultAddress(ctx context.Context, request *GetDefaultAddress) (*GetDefaultAddressResponse, error) {
 	response := new(GetDefaultAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetDefaultAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetDefaultAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1306,9 +1307,9 @@ func (service *Soap) GetDefaultAddress(request *GetDefaultAddress) (*GetDefaultA
 	return response, nil
 }
 
-func (service *Soap) GetDefaultPhoneNumber(request *GetDefaultPhoneNumber) (*GetDefaultPhoneNumberResponse, error) {
+func (service *Soap) GetDefaultPhoneNumber(ctx context.Context, request *GetDefaultPhoneNumber) (*GetDefaultPhoneNumberResponse, error) {
 	response := new(GetDefaultPhoneNumberResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetDefaultPhoneNumber", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetDefaultPhoneNumber", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1316,9 +1317,9 @@ func (service *Soap) GetDefaultPhoneNumber(request *GetDefaultPhoneNumber) (*Get
 	return response, nil
 }
 
-func (service *Soap) GetDefaultEmailAddress(request *GetDefaultEmailAddress) (*GetDefaultEmailAddressResponse, error) {
+func (service *Soap) GetDefaultEmailAddress(ctx context.Context, request *GetDefaultEmailAddress) (*GetDefaultEmailAddressResponse, error) {
 	response := new(GetDefaultEmailAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetDefaultEmailAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetDefaultEmailAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1326,9 +1327,9 @@ func (service *Soap) GetDefaultEmailAddress(request *GetDefaultEmailAddress) (*G
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByUsername(request *GetCustomerByUsername) (*GetCustomerByUsernameResponse, error) {
+func (service *Soap) GetCustomerByUsername(ctx context.Context, request *GetCustomerByUsername) (*GetCustomerByUsernameResponse, error) {
 	response := new(GetCustomerByUsernameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByUsername", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByUsername", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1336,9 +1337,9 @@ func (service *Soap) GetCustomerByUsername(request *GetCustomerByUsername) (*Get
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByEmailAddress(request *GetCustomerByEmailAddress) (*GetCustomerByEmailAddressResponse, error) {
+func (service *Soap) GetCustomerByEmailAddress(ctx context.Context, request *GetCustomerByEmailAddress) (*GetCustomerByEmailAddressResponse, error) {
 	response := new(GetCustomerByEmailAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByEmailAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByEmailAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1346,9 +1347,9 @@ func (service *Soap) GetCustomerByEmailAddress(request *GetCustomerByEmailAddres
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByPhoneNumber(request *GetCustomerByPhoneNumber) (*GetCustomerByPhoneNumberResponse, error) {
+func (service *Soap) GetCustomerByPhoneNumber(ctx context.Context, request *GetCustomerByPhoneNumber) (*GetCustomerByPhoneNumberResponse, error) {
 	response := new(GetCustomerByPhoneNumberResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByPhoneNumber", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByPhoneNumber", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1356,9 +1357,9 @@ func (service *Soap) GetCustomerByPhoneNumber(request *GetCustomerByPhoneNumber)
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByFirstName(request *GetCustomerByFirstName) (*GetCustomerByFirstNameResponse, error) {
+func (service *Soap) GetCustomerByFirstName(ctx context.Context, request *GetCustomerByFirstName) (*GetCustomerByFirstNameResponse, error) {
 	response := new(GetCustomerByFirstNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByFirstName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByFirstName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1366,9 +1367,9 @@ func (service *Soap) GetCustomerByFirstName(request *GetCustomerByFirstName) (*G
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByLastName(request *GetCustomerByLastName) (*GetCustomerByLastNameResponse, error) {
+func (service *Soap) GetCustomerByLastName(ctx context.Context, request *GetCustomerByLastName) (*GetCustomerByLastNameResponse, error) {
 	response := new(GetCustomerByLastNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByLastName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByLastName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1376,9 +1377,9 @@ func (service *Soap) GetCustomerByLastName(request *GetCustomerByLastName) (*Get
 	return response, nil
 }
 
-func (service *Soap) GetCustomerByName(request *GetCustomerByName) (*GetCustomerByNameResponse, error) {
+func (service *Soap) GetCustomerByName(ctx context.Context, request *GetCustomerByName) (*GetCustomerByNameResponse, error) {
 	response := new(GetCustomerByNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetCustomerByName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1386,9 +1387,9 @@ func (service *Soap) GetCustomerByName(request *GetCustomerByName) (*GetCustomer
 	return response, nil
 }
 
-func (service *Soap) UpdateTitle(request *UpdateTitle) (*UpdateTitleResponse, error) {
+func (service *Soap) UpdateTitle(ctx context.Context, request *UpdateTitle) (*UpdateTitleResponse, error) {
 	response := new(UpdateTitleResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateTitle", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateTitle", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1396,9 +1397,9 @@ func (service *Soap) UpdateTitle(request *UpdateTitle) (*UpdateTitleResponse, er
 	return response, nil
 }
 
-func (service *Soap) UpdateFirstName(request *UpdateFirstName) (*UpdateFirstNameResponse, error) {
+func (service *Soap) UpdateFirstName(ctx context.Context, request *UpdateFirstName) (*UpdateFirstNameResponse, error) {
 	response := new(UpdateFirstNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateFirstName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateFirstName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1406,9 +1407,9 @@ func (service *Soap) UpdateFirstName(request *UpdateFirstName) (*UpdateFirstName
 	return response, nil
 }
 
-func (service *Soap) UpdateLastName(request *UpdateLastName) (*UpdateLastNameResponse, error) {
+func (service *Soap) UpdateLastName(ctx context.Context, request *UpdateLastName) (*UpdateLastNameResponse, error) {
 	response := new(UpdateLastNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateLastName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateLastName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1416,9 +1417,9 @@ func (service *Soap) UpdateLastName(request *UpdateLastName) (*UpdateLastNameRes
 	return response, nil
 }
 
-func (service *Soap) UpdateUsername(request *UpdateUsername) (*UpdateUsernameResponse, error) {
+func (service *Soap) UpdateUsername(ctx context.Context, request *UpdateUsername) (*UpdateUsernameResponse, error) {
 	response := new(UpdateUsernameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateUsername", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateUsername", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1426,9 +1427,9 @@ func (service *Soap) UpdateUsername(request *UpdateUsername) (*UpdateUsernameRes
 	return response, nil
 }
 
-func (service *Soap) UpdatePassword(request *UpdatePassword) (*UpdatePasswordResponse, error) {
+func (service *Soap) UpdatePassword(ctx context.Context, request *UpdatePassword) (*UpdatePasswordResponse, error) {
 	response := new(UpdatePasswordResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdatePassword", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdatePassword", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1436,9 +1437,9 @@ func (service *Soap) UpdatePassword(request *UpdatePassword) (*UpdatePasswordRes
 	return response, nil
 }
 
-func (service *Soap) UpdateCustomer(request *UpdateCustomer) (*UpdateCustomerResponse, error) {
+func (service *Soap) UpdateCustomer(ctx context.Context, request *UpdateCustomer) (*UpdateCustomerResponse, error) {
 	response := new(UpdateCustomerResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/UpdateCustomer", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/UpdateCustomer", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1446,9 +1447,9 @@ func (service *Soap) UpdateCustomer(request *UpdateCustomer) (*UpdateCustomerRes
 	return response, nil
 }
 
-func (service *Soap) AddAddress(request *AddAddress) (*AddAddressResponse, error) {
+func (service *Soap) AddAddress(ctx context.Context, request *AddAddress) (*AddAddressResponse, error) {
 	response := new(AddAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AddAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AddAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1456,9 +1457,9 @@ func (service *Soap) AddAddress(request *AddAddress) (*AddAddressResponse, error
 	return response, nil
 }
 
-func (service *Soap) AddPhoneNumber(request *AddPhoneNumber) (*AddPhoneNumberResponse, error) {
+func (service *Soap) AddPhoneNumber(ctx context.Context, request *AddPhoneNumber) (*AddPhoneNumberResponse, error) {
 	response := new(AddPhoneNumberResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AddPhoneNumber", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AddPhoneNumber", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1466,9 +1467,9 @@ func (service *Soap) AddPhoneNumber(request *AddPhoneNumber) (*AddPhoneNumberRes
 	return response, nil
 }
 
-func (service *Soap) AddEmailAddress(request *AddEmailAddress) (*AddEmailAddressResponse, error) {
+func (service *Soap) AddEmailAddress(ctx context.Context, request *AddEmailAddress) (*AddEmailAddressResponse, error) {
 	response := new(AddEmailAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AddEmailAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AddEmailAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1476,9 +1477,9 @@ func (service *Soap) AddEmailAddress(request *AddEmailAddress) (*AddEmailAddress
 	return response, nil
 }
 
-func (service *Soap) AddCustomField(request *AddCustomField) (*AddCustomFieldResponse, error) {
+func (service *Soap) AddCustomField(ctx context.Context, request *AddCustomField) (*AddCustomFieldResponse, error) {
 	response := new(AddCustomFieldResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AddCustomField", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AddCustomField", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1486,9 +1487,9 @@ func (service *Soap) AddCustomField(request *AddCustomField) (*AddCustomFieldRes
 	return response, nil
 }
 
-func (service *Soap) RemoveAddress(request *RemoveAddress) (*RemoveAddressResponse, error) {
+func (service *Soap) RemoveAddress(ctx context.Context, request *RemoveAddress) (*RemoveAddressResponse, error) {
 	response := new(RemoveAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RemoveAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RemoveAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1496,9 +1497,9 @@ func (service *Soap) RemoveAddress(request *RemoveAddress) (*RemoveAddressRespon
 	return response, nil
 }
 
-func (service *Soap) RemovePhoneNumber(request *RemovePhoneNumber) (*RemovePhoneNumberResponse, error) {
+func (service *Soap) RemovePhoneNumber(ctx context.Context, request *RemovePhoneNumber) (*RemovePhoneNumberResponse, error) {
 	response := new(RemovePhoneNumberResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RemovePhoneNumber", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RemovePhoneNumber", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1506,9 +1507,9 @@ func (service *Soap) RemovePhoneNumber(request *RemovePhoneNumber) (*RemovePhone
 	return response, nil
 }
 
-func (service *Soap) RemoveEmailAddress(request *RemoveEmailAddress) (*RemoveEmailAddressResponse, error) {
+func (service *Soap) RemoveEmailAddress(ctx context.Context, request *RemoveEmailAddress) (*RemoveEmailAddressResponse, error) {
 	response := new(RemoveEmailAddressResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RemoveEmailAddress", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RemoveEmailAddress", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -1516,9 +1517,9 @@ func (service *Soap) RemoveEmailAddress(request *RemoveEmailAddress) (*RemoveEma
 	return response, nil
 }
 
-func (service *Soap) RemoveCustomField(request *RemoveCustomField) (*RemoveCustomFieldResponse, error) {
+func (service *Soap) RemoveCustomField(ctx context.Context, request *RemoveCustomField) (*RemoveCustomFieldResponse, error) {
 	response := new(RemoveCustomFieldResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/RemoveCustomField", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/RemoveCustomField", request, response)
 	if err != nil {
 		return nil, err
 	}

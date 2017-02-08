@@ -1,6 +1,7 @@
 package CISkillsetWs
 
 import (
+	"context"
 	"encoding/xml"
 	"tbp/avaya/soap"
 	"time"
@@ -192,9 +193,9 @@ func (service *Soap) SetHeader(header interface{}) {
 }
 
 // GetAllSkillsets -
-func (service *Soap) GetAllSkillsets(request *GetAllSkillsets) (*GetAllSkillsetsResponse, error) {
+func (service *Soap) GetAllSkillsets(ctx context.Context, request *GetAllSkillsets) (*GetAllSkillsetsResponse, error) {
 	response := new(GetAllSkillsetsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAllSkillsets", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAllSkillsets", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -203,9 +204,9 @@ func (service *Soap) GetAllSkillsets(request *GetAllSkillsets) (*GetAllSkillsets
 }
 
 // GetAllWebSkillsets -
-func (service *Soap) GetAllWebSkillsets(request *GetAllWebSkillsets) (*GetAllWebSkillsetsResponse, error) {
+func (service *Soap) GetAllWebSkillsets(ctx context.Context, request *GetAllWebSkillsets) (*GetAllWebSkillsetsResponse, error) {
 	response := new(GetAllWebSkillsetsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAllWebSkillsets", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAllWebSkillsets", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -214,9 +215,9 @@ func (service *Soap) GetAllWebSkillsets(request *GetAllWebSkillsets) (*GetAllWeb
 }
 
 // GetAllOutboundSkillsets -
-func (service *Soap) GetAllOutboundSkillsets(request *GetAllOutboundSkillsets) (*GetAllOutboundSkillsetsResponse, error) {
+func (service *Soap) GetAllOutboundSkillsets(ctx context.Context, request *GetAllOutboundSkillsets) (*GetAllOutboundSkillsetsResponse, error) {
 	response := new(GetAllOutboundSkillsetsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAllOutboundSkillsets", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAllOutboundSkillsets", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -225,9 +226,9 @@ func (service *Soap) GetAllOutboundSkillsets(request *GetAllOutboundSkillsets) (
 }
 
 // GetAllEmailSkillsets -
-func (service *Soap) GetAllEmailSkillsets(request *GetAllEmailSkillsets) (*GetAllEmailSkillsetsResponse, error) {
+func (service *Soap) GetAllEmailSkillsets(ctx context.Context, request *GetAllEmailSkillsets) (*GetAllEmailSkillsetsResponse, error) {
 	response := new(GetAllEmailSkillsetsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAllEmailSkillsets", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAllEmailSkillsets", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -236,9 +237,9 @@ func (service *Soap) GetAllEmailSkillsets(request *GetAllEmailSkillsets) (*GetAl
 }
 
 // GetSkillsetByID -
-func (service *Soap) GetSkillsetByID(request *GetSkillsetByID) (*GetSkillsetByIDResponse, error) {
+func (service *Soap) GetSkillsetByID(ctx context.Context, request *GetSkillsetByID) (*GetSkillsetByIDResponse, error) {
 	response := new(GetSkillsetByIDResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetSkillsetByID", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetSkillsetByID", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -247,9 +248,9 @@ func (service *Soap) GetSkillsetByID(request *GetSkillsetByID) (*GetSkillsetByID
 }
 
 // GetSkillsetByName -
-func (service *Soap) GetSkillsetByName(request *GetSkillsetByName) (*GetSkillsetByNameResponse, error) {
+func (service *Soap) GetSkillsetByName(ctx context.Context, request *GetSkillsetByName) (*GetSkillsetByNameResponse, error) {
 	response := new(GetSkillsetByNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetSkillsetByName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetSkillsetByName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -258,9 +259,9 @@ func (service *Soap) GetSkillsetByName(request *GetSkillsetByName) (*GetSkillset
 }
 
 // ReadSkillsetByName -
-func (service *Soap) ReadSkillsetByName(request *ReadSkillsetByName) (*ReadSkillsetByNameResponse, error) {
+func (service *Soap) ReadSkillsetByName(ctx context.Context, request *ReadSkillsetByName) (*ReadSkillsetByNameResponse, error) {
 	response := new(ReadSkillsetByNameResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ReadSkillsetByName", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ReadSkillsetByName", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -269,9 +270,9 @@ func (service *Soap) ReadSkillsetByName(request *ReadSkillsetByName) (*ReadSkill
 }
 
 // IsSkillsetInService -
-func (service *Soap) IsSkillsetInService(request *IsSkillsetInService) (*IsSkillsetInServiceResponse, error) {
+func (service *Soap) IsSkillsetInService(ctx context.Context, request *IsSkillsetInService) (*IsSkillsetInServiceResponse, error) {
 	response := new(IsSkillsetInServiceResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/IsSkillsetInService", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/IsSkillsetInService", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -280,9 +281,9 @@ func (service *Soap) IsSkillsetInService(request *IsSkillsetInService) (*IsSkill
 }
 
 // IsSkillsetNameInService -
-func (service *Soap) IsSkillsetNameInService(request *IsSkillsetNameInService) (*IsSkillsetNameInServiceResponse, error) {
+func (service *Soap) IsSkillsetNameInService(ctx context.Context, request *IsSkillsetNameInService) (*IsSkillsetNameInServiceResponse, error) {
 	response := new(IsSkillsetNameInServiceResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/IsSkillsetNameInService", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/IsSkillsetNameInService", request, response)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package CIUtilityWs
 
 import (
+	"context"
 	"encoding/xml"
 	"tbp/avaya/soap"
 	"time"
@@ -439,9 +440,9 @@ func (service *Soap) SetHeader(header interface{}) {
 	service.client.SetHeader(header)
 }
 
-func (service *Soap) CustomerLogin(request *CustomerLogin) (*CustomerLoginResponse, error) {
+func (service *Soap) CustomerLogin(ctx context.Context, request *CustomerLogin) (*CustomerLoginResponse, error) {
 	response := new(CustomerLoginResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/CustomerLogin", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/CustomerLogin", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -449,9 +450,9 @@ func (service *Soap) CustomerLogin(request *CustomerLogin) (*CustomerLoginRespon
 	return response, nil
 }
 
-func (service *Soap) GetAnonymousSessionKey(request *GetAnonymousSessionKey) (*GetAnonymousSessionKeyResponse, error) {
+func (service *Soap) GetAnonymousSessionKey(ctx context.Context, request *GetAnonymousSessionKey) (*GetAnonymousSessionKeyResponse, error) {
 	response := new(GetAnonymousSessionKeyResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAnonymousSessionKey", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAnonymousSessionKey", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -459,9 +460,9 @@ func (service *Soap) GetAnonymousSessionKey(request *GetAnonymousSessionKey) (*G
 	return response, nil
 }
 
-func (service *Soap) GetAnonymousCustomerID(request *GetAnonymousCustomerID) (*GetAnonymousCustomerIDResponse, error) {
+func (service *Soap) GetAnonymousCustomerID(ctx context.Context, request *GetAnonymousCustomerID) (*GetAnonymousCustomerIDResponse, error) {
 	response := new(GetAnonymousCustomerIDResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAnonymousCustomerID", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAnonymousCustomerID", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -469,9 +470,9 @@ func (service *Soap) GetAnonymousCustomerID(request *GetAnonymousCustomerID) (*G
 	return response, nil
 }
 
-func (service *Soap) GetAndUpdateAnonymousCustomerID(request *GetAndUpdateAnonymousCustomerID) (*GetAndUpdateAnonymousCustomerIDResponse, error) {
+func (service *Soap) GetAndUpdateAnonymousCustomerID(ctx context.Context, request *GetAndUpdateAnonymousCustomerID) (*GetAndUpdateAnonymousCustomerIDResponse, error) {
 	response := new(GetAndUpdateAnonymousCustomerIDResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetAndUpdateAnonymousCustomerID", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetAndUpdateAnonymousCustomerID", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -479,9 +480,9 @@ func (service *Soap) GetAndUpdateAnonymousCustomerID(request *GetAndUpdateAnonym
 	return response, nil
 }
 
-func (service *Soap) ExtendedCustomerLogin(request *ExtendedCustomerLogin) (*ExtendedCustomerLoginResponse, error) {
+func (service *Soap) ExtendedCustomerLogin(ctx context.Context, request *ExtendedCustomerLogin) (*ExtendedCustomerLoginResponse, error) {
 	response := new(ExtendedCustomerLoginResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/ExtendedCustomerLogin", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/ExtendedCustomerLogin", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -489,9 +490,9 @@ func (service *Soap) ExtendedCustomerLogin(request *ExtendedCustomerLogin) (*Ext
 	return response, nil
 }
 
-func (service *Soap) CustomerLogoff(request *CustomerLogoff) (*CustomerLogoffResponse, error) {
+func (service *Soap) CustomerLogoff(ctx context.Context, request *CustomerLogoff) (*CustomerLogoffResponse, error) {
 	response := new(CustomerLogoffResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/CustomerLogoff", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/CustomerLogoff", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -499,9 +500,9 @@ func (service *Soap) CustomerLogoff(request *CustomerLogoff) (*CustomerLogoffRes
 	return response, nil
 }
 
-func (service *Soap) CustomerEndSession(request *CustomerEndSession) (*CustomerEndSessionResponse, error) {
+func (service *Soap) CustomerEndSession(ctx context.Context, request *CustomerEndSession) (*CustomerEndSessionResponse, error) {
 	response := new(CustomerEndSessionResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/CustomerEndSession", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/CustomerEndSession", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -509,9 +510,9 @@ func (service *Soap) CustomerEndSession(request *CustomerEndSession) (*CustomerE
 	return response, nil
 }
 
-func (service *Soap) CustomerLogoffByContactID(request *CustomerLogoffByContactID) (*CustomerLogoffByContactIDResponse, error) {
+func (service *Soap) CustomerLogoffByContactID(ctx context.Context, request *CustomerLogoffByContactID) (*CustomerLogoffByContactIDResponse, error) {
 	response := new(CustomerLogoffByContactIDResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/CustomerLogoffByContactID", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/CustomerLogoffByContactID", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -519,9 +520,9 @@ func (service *Soap) CustomerLogoffByContactID(request *CustomerLogoffByContactI
 	return response, nil
 }
 
-func (service *Soap) AdministratorLogin(request *AdministratorLogin) (*AdministratorLoginResponse, error) {
+func (service *Soap) AdministratorLogin(ctx context.Context, request *AdministratorLogin) (*AdministratorLoginResponse, error) {
 	response := new(AdministratorLoginResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AdministratorLogin", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AdministratorLogin", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -529,9 +530,9 @@ func (service *Soap) AdministratorLogin(request *AdministratorLogin) (*Administr
 	return response, nil
 }
 
-func (service *Soap) AdministratorLogoff(request *AdministratorLogoff) (*AdministratorLogoffResponse, error) {
+func (service *Soap) AdministratorLogoff(ctx context.Context, request *AdministratorLogoff) (*AdministratorLogoffResponse, error) {
 	response := new(AdministratorLogoffResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/AdministratorLogoff", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/AdministratorLogoff", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -539,9 +540,9 @@ func (service *Soap) AdministratorLogoff(request *AdministratorLogoff) (*Adminis
 	return response, nil
 }
 
-func (service *Soap) IsContactCentreClosed(request *IsContactCentreClosed) (*IsContactCentreClosedResponse, error) {
+func (service *Soap) IsContactCentreClosed(ctx context.Context, request *IsContactCentreClosed) (*IsContactCentreClosedResponse, error) {
 	response := new(IsContactCentreClosedResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/IsContactCentreClosed", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/IsContactCentreClosed", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -549,9 +550,9 @@ func (service *Soap) IsContactCentreClosed(request *IsContactCentreClosed) (*IsC
 	return response, nil
 }
 
-func (service *Soap) GetServerTime(request *GetServerTime) (*GetServerTimeResponse, error) {
+func (service *Soap) GetServerTime(ctx context.Context, request *GetServerTime) (*GetServerTimeResponse, error) {
 	response := new(GetServerTimeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetServerTime", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetServerTime", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -559,9 +560,9 @@ func (service *Soap) GetServerTime(request *GetServerTime) (*GetServerTimeRespon
 	return response, nil
 }
 
-func (service *Soap) GetServerUTCTime(request *GetServerUTCTime) (*GetServerUTCTimeResponse, error) {
+func (service *Soap) GetServerUTCTime(ctx context.Context, request *GetServerUTCTime) (*GetServerUTCTimeResponse, error) {
 	response := new(GetServerUTCTimeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetServerUTCTime", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetServerUTCTime", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -569,9 +570,9 @@ func (service *Soap) GetServerUTCTime(request *GetServerUTCTime) (*GetServerUTCT
 	return response, nil
 }
 
-func (service *Soap) GetServerRAWTime(request *GetServerRAWTime) (*GetServerRAWTimeResponse, error) {
+func (service *Soap) GetServerRAWTime(ctx context.Context, request *GetServerRAWTime) (*GetServerRAWTimeResponse, error) {
 	response := new(GetServerRAWTimeResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetServerRAWTime", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetServerRAWTime", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -579,9 +580,9 @@ func (service *Soap) GetServerRAWTime(request *GetServerRAWTime) (*GetServerRAWT
 	return response, nil
 }
 
-func (service *Soap) TimeStampToMilliseconds(request *TimeStampToMilliseconds) (*TimeStampToMillisecondsResponse, error) {
+func (service *Soap) TimeStampToMilliseconds(ctx context.Context, request *TimeStampToMilliseconds) (*TimeStampToMillisecondsResponse, error) {
 	response := new(TimeStampToMillisecondsResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/TimeStampToMilliseconds", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/TimeStampToMilliseconds", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -589,9 +590,9 @@ func (service *Soap) TimeStampToMilliseconds(request *TimeStampToMilliseconds) (
 	return response, nil
 }
 
-func (service *Soap) MillisecondsToTimeStamp(request *MillisecondsToTimeStamp) (*MillisecondsToTimeStampResponse, error) {
+func (service *Soap) MillisecondsToTimeStamp(ctx context.Context, request *MillisecondsToTimeStamp) (*MillisecondsToTimeStampResponse, error) {
 	response := new(MillisecondsToTimeStampResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/MillisecondsToTimeStamp", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/MillisecondsToTimeStamp", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -599,9 +600,9 @@ func (service *Soap) MillisecondsToTimeStamp(request *MillisecondsToTimeStamp) (
 	return response, nil
 }
 
-func (service *Soap) GetTotalQueued(request *GetTotalQueued) (*GetTotalQueuedResponse, error) {
+func (service *Soap) GetTotalQueued(ctx context.Context, request *GetTotalQueued) (*GetTotalQueuedResponse, error) {
 	response := new(GetTotalQueuedResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetTotalQueued", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetTotalQueued", request, response)
 	if err != nil {
 		return nil, err
 	}
@@ -609,9 +610,9 @@ func (service *Soap) GetTotalQueued(request *GetTotalQueued) (*GetTotalQueuedRes
 	return response, nil
 }
 
-func (service *Soap) GetTotalQueuedToSkillset(request *GetTotalQueuedToSkillset) (*GetTotalQueuedToSkillsetResponse, error) {
+func (service *Soap) GetTotalQueuedToSkillset(ctx context.Context, request *GetTotalQueuedToSkillset) (*GetTotalQueuedToSkillsetResponse, error) {
 	response := new(GetTotalQueuedToSkillsetResponse)
-	err := service.client.Call("http://webservices.ci.ccmm.applications.nortel.com/GetTotalQueuedToSkillset", request, response)
+	err := service.client.Call(ctx, "http://webservices.ci.ccmm.applications.nortel.com/GetTotalQueuedToSkillset", request, response)
 	if err != nil {
 		return nil, err
 	}

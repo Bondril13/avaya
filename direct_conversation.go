@@ -1,6 +1,7 @@
 package avaya
 
 import (
+	"context"
 	"fmt"
 	"log"
 )
@@ -20,20 +21,26 @@ type DirectConversation struct {
 func (c *DirectConversation) CustomerID() int64 { return c.customerID }
 func (c *DirectConversation) Name() string      { return c.name }
 
-func (c *DirectConversation) Keepalive(isTyping bool) error {
-	return keepAlive(c.sessionKey, c.contactID, isTyping)
+func (c *DirectConversation) Keepalive(ctx context.Context, isTyping bool) error {
+	if c.IsClosed() {
+		return fmt.Errorf("Conversation closed, not sending keep alive")
+	}
+	return keepAlive(ctx, c.sessionKey, c.contactID, isTyping)
 }
 
-func (c *DirectConversation) WriteMessage(message string) error {
-	return writeMessage(c.sessionKey, c.contactID, message, fromCustomer)
+func (c *DirectConversation) WriteMessage(ctx context.Context, message string) error {
+	if c.IsClosed() {
+		return fmt.Errorf("Conversation closed, not writing message")
+	}
+	return writeMessage(ctx, c.sessionKey, c.contactID, message, fromCustomer)
 }
 
-func (c *DirectConversation) ReadMessages() ([]Message, bool, error) {
+func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool, error) {
 	if c.closed {
-		return nil, false, fmt.Errorf("Cannot read messages - conversation is closed")
+		return nil, false, fmt.Errorf("Conversation closed, not reading messages")
 	}
 
-	soapMessages, err := readMessages(c.sessionKey, c.contactID, false, c.lastReadTime)
+	soapMessages, err := readMessages(ctx, c.sessionKey, c.contactID, false, c.lastReadTime)
 	if err != nil {
 		return nil, false, err
 	}
@@ -63,41 +70,43 @@ func (c *DirectConversation) ReadMessages() ([]Message, bool, error) {
 	return messages, advisorTyping, nil
 }
 
-func (c *DirectConversation) Close() {
+func (c *DirectConversation) Close(ctx context.Context) {
 	if c.closed {
 		return
 	}
 	c.closed = true
 	if c.answered {
 		log.Println("Close() answered")
-		if err := writeMessage(c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
+		if err := writeMessage(ctx, c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
 			log.Println("Close(): failed to send disconnect message:", err)
 		}
 	} else {
 		log.Println("Close() abandoning queue")
-		AbandonQue(c.sessionKey, c.contactID, "The conversation has ended.")
+		AbandonQue(ctx, c.sessionKey, c.contactID, "The conversation has ended.")
 	}
-	EndSession(c.sessionKey, c.contactID)
+	EndSession(ctx, c.sessionKey, c.contactID)
 }
 
+func (c *DirectConversation) IsClosed() bool { return c.closed }
+
 // NewConversation - Creates a new Conversation
-func newDirectConversation(name, email, skillsetName string) (*DirectConversation, error) {
-	sessionID, anonymousID, err := anonymousLogin()
+func NewDirectConversation(ctx context.Context, name, email, skillsetName string) (Conversation, error) {
+	sessionID, anonymousID, err := anonymousLogin(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	customerID, err := customerID(sessionID, int64(anonymousID), email)
+	customerID, err := customerID(ctx, sessionID, int64(anonymousID), email)
 	if err != nil {
 		return nil, err
 	}
 
-	skillset, err := skillset(sessionID, skillsetName)
+	skillset, err := skillset(ctx, sessionID, skillsetName)
 	if err != nil {
 		return nil, err
 	}
 
-	contactID, err := requestChat(customerID, sessionID, skillset.ID)
+	contactID, err := requestChat(ctx, customerID, sessionID, skillset.ID)
 	if err != nil {
 		return nil, err
 	}

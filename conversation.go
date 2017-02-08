@@ -1,11 +1,14 @@
 package avaya
 
+import "context"
+
 // Conversation - an avaya conversation
 type Conversation interface {
-	Keepalive(isTyping bool) error
-	WriteMessage(text string) error
-	ReadMessages() ([]Message, bool, error)
-	Close()
+	Keepalive(ctx context.Context, isTyping bool) error
+	WriteMessage(context.Context, string) error
+	ReadMessages(context.Context) ([]Message, bool, error)
+	Close(context.Context)
+	IsClosed() bool
 	Name() string
 }
 

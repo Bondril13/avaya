@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/xml"
 	//	"fmt"
+	"context"
 	"io/ioutil"
 	"log"
 	"net"
@@ -18,8 +19,10 @@ var _ xml.Name
 
 var timeout = time.Duration(30 * time.Second)
 
-func dialTimeout(network, addr string) (net.Conn, error) {
-	return net.DialTimeout(network, addr, timeout)
+func dialTimeout(ctx context.Context, network, addr string) (net.Conn, error) {
+	ctx, _ = context.WithTimeout(ctx, timeout)
+	d := net.Dialer{}
+	return d.DialContext(ctx, network, addr)
 }
 
 type SOAPEnvelope struct {
@@ -128,7 +131,7 @@ func (s *SOAPClient) SetHeader(header interface{}) {
 	s.header = header
 }
 
-func (s *SOAPClient) Call(soapAction string, request, response interface{}) error {
+func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, response interface{}) error {
 	envelope := SOAPEnvelope{}
 
 	if s.header != nil {
@@ -152,6 +155,7 @@ func (s *SOAPClient) Call(soapAction string, request, response interface{}) erro
 	log.Println(buffer.String())
 
 	req, err := http.NewRequest("POST", s.url, buffer)
+	req = req.WithContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -171,7 +175,7 @@ func (s *SOAPClient) Call(soapAction string, request, response interface{}) erro
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: s.tls,
 		},
-		Dial: dialTimeout,
+		DialContext: dialTimeout,
 	}
 
 	client := &http.Client{Transport: tr}
