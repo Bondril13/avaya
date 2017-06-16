@@ -2,7 +2,7 @@ package CIUtilityWs
 
 import (
 	_ "fmt"
-	"tbp/avaya/soap"
+	"github.com/TheBookPeople/avaya/soap"
 	"testing"
 )
 

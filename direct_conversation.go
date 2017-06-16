@@ -8,6 +8,7 @@ import (
 
 // DirectConversation - A conversation between a client and an advisor.
 type DirectConversation struct {
+	client       Client
 	closed       bool
 	answered     bool
 	name         string
@@ -25,14 +26,14 @@ func (c *DirectConversation) Keepalive(ctx context.Context, isTyping bool) error
 	if c.IsClosed() {
 		return fmt.Errorf("Conversation closed, not sending keep alive")
 	}
-	return keepAlive(ctx, c.sessionKey, c.contactID, isTyping)
+	return c.client.KeepAlive(ctx, c.sessionKey, c.contactID, isTyping)
 }
 
 func (c *DirectConversation) WriteMessage(ctx context.Context, message string) error {
 	if c.IsClosed() {
 		return fmt.Errorf("Conversation closed, not writing message")
 	}
-	return writeMessage(ctx, c.sessionKey, c.contactID, message, fromCustomer)
+	return c.client.WriteMessage(ctx, c.sessionKey, c.contactID, message, fromCustomer)
 }
 
 func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool, error) {
@@ -40,7 +41,7 @@ func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool,
 		return nil, false, fmt.Errorf("Conversation closed, not reading messages")
 	}
 
-	soapMessages, err := readMessages(ctx, c.sessionKey, c.contactID, false, c.lastReadTime)
+	soapMessages, err := c.client.ReadMessages(ctx, c.sessionKey, c.contactID, false, c.lastReadTime)
 	if err != nil {
 		return nil, false, err
 	}
@@ -80,41 +81,42 @@ func (c *DirectConversation) Close(ctx context.Context) {
 	c.closed = true
 	if c.answered {
 		log.Println("Close() answered")
-		if err := writeMessage(ctx, c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
+		if err := c.client.WriteMessage(ctx, c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
 			log.Println("Close(): failed to send disconnect message:", err)
 		}
 	} else {
 		log.Println("Close() abandoning queue")
-		AbandonQue(ctx, c.sessionKey, c.contactID, "The conversation has ended.")
+		c.client.AbandonQue(ctx, c.sessionKey, c.contactID, "The conversation has ended.")
 	}
-	EndSession(ctx, c.sessionKey, c.contactID)
+	c.client.EndSession(ctx, c.sessionKey, c.contactID)
 }
 
 func (c *DirectConversation) IsClosed() bool { return c.closed }
 
 // NewConversation - Creates a new Conversation
-func NewDirectConversation(ctx context.Context, name, email, skillsetName string) (Conversation, error) {
-	sessionID, anonymousID, err := anonymousLogin(ctx)
+func NewDirectConversation(ctx context.Context, c Client, name, email, skillsetName string) (Conversation, error) {
+	sessionID, anonymousID, err := c.AnonymousLogin(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	customerID, err := customerID(ctx, sessionID, int64(anonymousID), email)
+	customerID, err := c.CustomerID(ctx, sessionID, int64(anonymousID), email)
 	if err != nil {
 		return nil, err
 	}
 
-	skillset, err := skillset(ctx, sessionID, skillsetName)
+	skillset, err := c.Skillset(ctx, sessionID, skillsetName)
 	if err != nil {
 		return nil, err
 	}
 
-	contactID, err := requestChat(ctx, customerID, sessionID, skillset.ID)
+	contactID, err := c.RequestChat(ctx, customerID, sessionID, skillset.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	return &DirectConversation{
+		c,
 		false,
 		false,
 		name,

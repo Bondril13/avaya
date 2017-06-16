@@ -6,31 +6,39 @@ import (
 	"log"
 	"strconv"
 
-	"tbp/avaya/soap"
-	"tbp/avaya/soap/CICustomerWs"
-	"tbp/avaya/soap/CISkillsetWs"
-	"tbp/avaya/soap/CIUtilityWs"
-	"tbp/avaya/soap/CIWebCommsWs"
+	"github.com/TheBookPeople/avaya/soap"
+	"github.com/TheBookPeople/avaya/soap/CICustomerWs"
+	"github.com/TheBookPeople/avaya/soap/CISkillsetWs"
+	"github.com/TheBookPeople/avaya/soap/CIUtilityWs"
+	"github.com/TheBookPeople/avaya/soap/CIWebCommsWs"
 )
 
-func newCIUtilityWs() *CIUtilityWs.Soap {
-	return CIUtilityWs.NewSoap("", false, &soap.BasicAuth{})
+type Client struct {
+	baseURL string // e.g. http://avaya-server
 }
 
-func newCISkillset() *CISkillsetWs.Soap {
-	return CISkillsetWs.NewSoap("", false, &soap.BasicAuth{})
+func NewClient(proto, host string) Client {
+	return Client{proto + "://" + host}
 }
 
-func newCIWebComms() *CIWebCommsWs.Soap {
-	return CIWebCommsWs.NewSoap("", false, &soap.BasicAuth{})
+func (c Client) newCIUtilityWs() *CIUtilityWs.Soap {
+	return CIUtilityWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
 }
 
-func newCICustomerWs() *CICustomerWs.Soap {
-	return CICustomerWs.NewSoap("", false, &soap.BasicAuth{})
+func (c Client) newCISkillset() *CISkillsetWs.Soap {
+	return CISkillsetWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
 }
 
-func anonymousLogin(ctx context.Context) (string, int64, error) {
-	ciUtil := newCIUtilityWs()
+func (c Client) newCIWebComms() *CIWebCommsWs.Soap {
+	return CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+}
+
+func (c Client) newCICustomerWs() *CICustomerWs.Soap {
+	return CICustomerWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+}
+
+func (c Client) AnonymousLogin(ctx context.Context) (string, int64, error) {
+	ciUtil := c.newCIUtilityWs()
 	resp, err := ciUtil.GetAnonymousSessionKey(ctx, &CIUtilityWs.GetAnonymousSessionKey{})
 	if err != nil {
 		return "", 0, fmt.Errorf("Failed to get anonymous session key: %v", err)
@@ -42,8 +50,8 @@ func anonymousLogin(ctx context.Context) (string, int64, error) {
 	return resp.GetAnonymousSessionKeyResult.SessionKey, int64(anonymousID), nil
 }
 
-func keepAlive(ctx context.Context, sessionID string, contactID int64, isTyping bool) error {
-	ciWebComms := newCIWebComms()
+func (c Client) KeepAlive(ctx context.Context, sessionID string, contactID int64, isTyping bool) error {
+	ciWebComms := c.newCIWebComms()
 	_, err := ciWebComms.UpdateAliveTimeAndUpdateIsTyping(ctx, &CIWebCommsWs.UpdateAliveTimeAndUpdateIsTyping{
 		ContactID:  contactID,
 		SessionKey: sessionID,
@@ -53,9 +61,9 @@ func keepAlive(ctx context.Context, sessionID string, contactID int64, isTyping 
 	return err
 }
 
-func customerID(ctx context.Context, sessionID string, anonymousID int64, email string) (int64, error) {
+func (c Client) CustomerID(ctx context.Context, sessionID string, anonymousID int64, email string) (int64, error) {
 
-	ciUtil := newCIUtilityWs()
+	ciUtil := c.newCIUtilityWs()
 	resp, err := ciUtil.GetAndUpdateAnonymousCustomerID(ctx, &CIUtilityWs.GetAndUpdateAnonymousCustomerID{
 		LoginResult: &CIUtilityWs.AnonymousLoginResult{
 			AnonymousID: anonymousID,
@@ -76,8 +84,8 @@ func customerID(ctx context.Context, sessionID string, anonymousID int64, email 
 	return resp.GetAndUpdateAnonymousCustomerIDResult, nil
 }
 
-func IsSkillsetInService(ctx context.Context, skillsetName string) (bool, error) {
-	resp, err := newCISkillset().IsSkillsetNameInService(ctx, &CISkillsetWs.IsSkillsetNameInService{
+func (c Client) IsSkillsetInService(ctx context.Context, skillsetName string) (bool, error) {
+	resp, err := c.newCISkillset().IsSkillsetNameInService(ctx, &CISkillsetWs.IsSkillsetNameInService{
 		SkillsetName: skillsetName,
 	})
 	if err != nil {
@@ -91,8 +99,8 @@ type Skillset struct {
 	Name string
 }
 
-func skillset(ctx context.Context, sessionID, name string) (*Skillset, error) {
-	ciSkillset := newCISkillset()
+func (c Client) Skillset(ctx context.Context, sessionID, name string) (*Skillset, error) {
+	ciSkillset := c.newCISkillset()
 	resp, err := ciSkillset.GetSkillsetByName(ctx, &CISkillsetWs.GetSkillsetByName{
 		SessionKey:   sessionID,
 		SkillsetName: name,
@@ -108,8 +116,8 @@ func skillset(ctx context.Context, sessionID, name string) (*Skillset, error) {
 	}, nil
 }
 
-func requestChat(ctx context.Context, customerID int64, sessionID string, skillsetID int64) (int64, error) {
-	ciCustomerWs := newCICustomerWs()
+func (c Client) RequestChat(ctx context.Context, customerID int64, sessionID string, skillsetID int64) (int64, error) {
+	ciCustomerWs := c.newCICustomerWs()
 
 	resp, err := ciCustomerWs.RequestTextChat(ctx, &CICustomerWs.RequestTextChat{
 		CustID:     customerID,
@@ -126,8 +134,8 @@ func requestChat(ctx context.Context, customerID int64, sessionID string, skills
 	return resp.RequestTextChatResult, nil
 }
 
-func readMessages(ctx context.Context, sessionKey string, contactID int64, isWriting bool, lastReadTime int64) (*CIWebCommsWs.CIMultipleChatMessageReadType, error) {
-	ciWebComms := CIWebCommsWs.NewSoap("", false, &soap.BasicAuth{})
+func (c Client) ReadMessages(ctx context.Context, sessionKey string, contactID int64, isWriting bool, lastReadTime int64) (*CIWebCommsWs.CIMultipleChatMessageReadType, error) {
+	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
 	resp, err := ciWebComms.ReadChatMessage(ctx, &CIWebCommsWs.ReadChatMessage{
 		ContactID: contactID,
 		IsWriting: isWriting,
@@ -152,9 +160,9 @@ const (
 	agentDisconnected    = CIWebCommsWs.CIChatMessageTypeSessionDisconnectedbyAgent
 )
 
-func writeMessage(ctx context.Context, sessionKey string, contactID int64, message string, msgType CIWebCommsWs.CIChatMessageType) error {
+func (c Client) WriteMessage(ctx context.Context, sessionKey string, contactID int64, message string, msgType CIWebCommsWs.CIChatMessageType) error {
 
-	ciWebComms := CIWebCommsWs.NewSoap("", false, &soap.BasicAuth{})
+	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
 	resp, err := ciWebComms.WriteChatMessage(ctx, &CIWebCommsWs.WriteChatMessage{
 		ContactID:       contactID,
 		Message:         message,
@@ -170,8 +178,8 @@ func writeMessage(ctx context.Context, sessionKey string, contactID int64, messa
 	return nil
 }
 
-func AbandonQue(ctx context.Context, sessionKey string, contactID int64, reason string) error {
-	ciWebComms := newCIWebComms()
+func (c Client) AbandonQue(ctx context.Context, sessionKey string, contactID int64, reason string) error {
+	ciWebComms := c.newCIWebComms()
 	_, err := ciWebComms.AbandonQueuingWebCommsContact(ctx, &CIWebCommsWs.AbandonQueuingWebCommsContact{
 		SessionKey:     sessionKey,
 		ContactID:      contactID,
@@ -180,8 +188,8 @@ func AbandonQue(ctx context.Context, sessionKey string, contactID int64, reason 
 	return err
 }
 
-func EndSession(ctx context.Context, sessionKey string, contactID int64) error {
-	ciUtil := newCIUtilityWs()
+func (c Client) EndSession(ctx context.Context, sessionKey string, contactID int64) error {
+	ciUtil := c.newCIUtilityWs()
 	_, err := ciUtil.CustomerLogoffByContactID(ctx, &CIUtilityWs.CustomerLogoffByContactID{
 		SessionKey: sessionKey,
 		ContactID:  contactID,

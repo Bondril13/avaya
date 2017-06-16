@@ -1,8 +1,8 @@
 package CISkillsetWs
 
 import (
-	"tbp/avaya/soap"
-	"tbp/avaya/soap/CIUtilityWs"
+	"github.com/TheBookPeople/avaya/soap"
+	"github.com/TheBookPeople/avaya/soap/CIUtilityWs"
 	"testing"
 )
 

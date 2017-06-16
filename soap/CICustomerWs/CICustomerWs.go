@@ -3,7 +3,7 @@ package CICustomerWs
 import (
 	"context"
 	"encoding/xml"
-	"tbp/avaya/soap"
+	"github.com/TheBookPeople/avaya/soap"
 	"time"
 )
 
@@ -1152,10 +1152,9 @@ type Soap struct {
 	client *soap.SOAPClient
 }
 
-func NewSoap(url string, tls bool, auth *soap.BasicAuth) *Soap {
-	if url == "" {
-		url = "http://***REMOVED***/ccmmwebservices/CICustomerWs.asmx"
-	}
+func NewSoap(baseURL string, tls bool, auth *soap.BasicAuth) *Soap {
+	url := baseURL + "/ccmmwebservices/CICustomerWs.asmx"
+	//url = "http://***REMOVED***/ccmmwebservices/CICustomerWs.asmx"
 	client := soap.NewSOAPClient(url, tls, auth)
 
 	return &Soap{
