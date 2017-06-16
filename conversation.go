@@ -6,7 +6,7 @@ import "context"
 type Conversation interface {
 	Keepalive(ctx context.Context, isTyping bool) error
 	WriteMessage(context.Context, string) error
-	ReadMessages(context.Context) ([]Message, bool, error)
+	ReadMessages(context.Context) (messages []Message, advisorTyping bool, err error)
 	Close(context.Context)
 	IsClosed() bool
 	Name() string
