@@ -1154,7 +1154,6 @@ type Soap struct {
 
 func NewSoap(baseURL string, tls bool, auth *soap.BasicAuth) *Soap {
 	url := baseURL + "/ccmmwebservices/CICustomerWs.asmx"
-	//url = "http://***REMOVED***/ccmmwebservices/CICustomerWs.asmx"
 	client := soap.NewSOAPClient(url, tls, auth)
 
 	return &Soap{
