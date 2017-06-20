@@ -19,8 +19,8 @@ type ThrottledConversation struct {
 
 func (tc *ThrottledConversation) queueRequest(ctx context.Context, f func()) error {
 	done := make(chan bool)
-	defer close(done)
 	go func() { // Done in goroutine so to honour ctx.
+		defer close(done)
 		tc.requests <- f
 		done <- true
 	}()
@@ -46,8 +46,8 @@ func (tc *ThrottledConversation) Keepalive(ctx context.Context, isTyping bool) e
 	}
 
 	resp := make(chan error)
-	defer close(resp)
 	err := tc.queueRequest(ctx, func() {
+		defer close(resp)
 		resp <- tc.wrapped.Keepalive(ctx, isTyping)
 	})
 	if err != nil {
@@ -61,8 +61,8 @@ func (tc *ThrottledConversation) Keepalive(ctx context.Context, isTyping bool) e
 // WriteMessage - Send chat message
 func (tc *ThrottledConversation) WriteMessage(ctx context.Context, message string) error {
 	resp := make(chan error)
-	defer close(resp)
 	err := tc.queueRequest(ctx, func() {
+		defer close(resp)
 		resp <- tc.wrapped.WriteMessage(ctx, message)
 	})
 	if err != nil {
@@ -80,9 +80,9 @@ type readMessageResponse struct {
 // ReadMessages - Non-blocking read to check for messages from the advisor
 func (tc *ThrottledConversation) ReadMessages(ctx context.Context) ([]Message, bool, error) {
 	resp := make(chan readMessageResponse)
-	defer close(resp)
 
 	err := tc.queueRequest(ctx, func() {
+		defer close(resp)
 		m, typing, e := tc.wrapped.ReadMessages(ctx)
 		resp <- readMessageResponse{m, typing, e}
 	})
@@ -100,9 +100,9 @@ func (tc *ThrottledConversation) Close(ctx context.Context) {
 	}
 
 	done := make(chan bool)
-	defer close(done)
 
 	err := tc.queueRequest(ctx, func() {
+		defer close(done)
 		tc.wrapped.Close(ctx)
 		done <- true
 	})
