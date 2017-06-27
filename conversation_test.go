@@ -1,12 +1,16 @@
 package avaya
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func TestNewConversation(t *testing.T) {
 	name := "Testy McTestface"
 	email := "test@test.io"
 
-	c, err := NewConversation(name, email, "WC_Default_Skillset")
+	client := NewClient("http", "host")
+	c, err := NewDirectConversation(context.Background(), client, name, email, "WC_Default_Skillset")
 	if err != nil {
 		t.Error(err)
 	}

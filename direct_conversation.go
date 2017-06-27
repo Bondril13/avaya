@@ -17,6 +17,7 @@ type DirectConversation struct {
 	contactID    int64
 	skillset     *Skillset
 	lastReadTime int64
+	verbose      bool
 }
 
 func (c *DirectConversation) CustomerID() int64 { return c.customerID }
@@ -74,6 +75,11 @@ func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool,
 	return messages, advisorTyping, nil
 }
 
+func (c *DirectConversation) Verbose(verbose bool) {
+	c.verbose = verbose
+	c.client.Verbose = verbose
+}
+
 func (c *DirectConversation) Close(ctx context.Context) {
 	if c.closed {
 		return
@@ -90,6 +96,8 @@ func (c *DirectConversation) Close(ctx context.Context) {
 	}
 	c.client.EndSession(ctx, c.sessionKey, c.contactID)
 }
+
+func (c *DirectConversation) IsAnswered() bool { return c.answered }
 
 func (c *DirectConversation) IsClosed() bool { return c.closed }
 
@@ -125,5 +133,6 @@ func NewDirectConversation(ctx context.Context, c Client, name, email, skillsetN
 		contactID,
 		skillset,
 		1,
+		false,
 	}, nil
 }

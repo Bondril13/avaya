@@ -59,10 +59,11 @@ type BasicAuth struct {
 }
 
 type SOAPClient struct {
-	url    string
-	tls    bool
-	auth   *BasicAuth
-	header interface{}
+	url     string
+	tls     bool
+	auth    *BasicAuth
+	header  interface{}
+	verbose bool
 }
 
 func (b *SOAPBody) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -119,11 +120,12 @@ func (f SOAPFault) Error() string {
 	return f.String
 }
 
-func NewSOAPClient(url string, tls bool, auth *BasicAuth) *SOAPClient {
+func NewSOAPClient(url string, tls bool, auth *BasicAuth, verbose bool) *SOAPClient {
 	return &SOAPClient{
-		url:  url,
-		tls:  tls,
-		auth: auth,
+		url:     url,
+		tls:     tls,
+		auth:    auth,
+		verbose: verbose,
 	}
 }
 
@@ -152,7 +154,9 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 		return err
 	}
 
-	log.Println(buffer.String())
+	if s.verbose {
+		log.Println(buffer.String())
+	}
 
 	req, err := http.NewRequest("POST", s.url, buffer)
 	req = req.WithContext(ctx)
@@ -194,7 +198,9 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 		return nil
 	}
 
-	log.Println(string(rawbody))
+	if s.verbose {
+		log.Println(string(rawbody))
+	}
 	respEnvelope := new(SOAPEnvelope)
 	respEnvelope.Body = SOAPBody{Content: response}
 	err = xml.Unmarshal(rawbody, respEnvelope)

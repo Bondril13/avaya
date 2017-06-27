@@ -1,13 +1,18 @@
 package avaya
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func TestAnonymousLogin(t *testing.T) {
-	sesh1, anonymousID, err := anonymousLogin()
+	client := NewClient("http", "host")
+	ctx := context.Background()
+	sesh1, anonymousID, err := client.AnonymousLogin(ctx)
 	if err != nil {
 		t.Error(err)
 	}
-	sesh2, anonmousID2, err := anonymousLogin()
+	sesh2, anonmousID2, err := client.AnonymousLogin(ctx)
 	if err != nil {
 		t.Error(err)
 	}
@@ -22,12 +27,14 @@ func TestAnonymousLogin(t *testing.T) {
 
 func TestCustomerID(t *testing.T) {
 
-	sessionID, anonymousID, err := anonymousLogin()
+	client := NewClient("http", "host")
+	ctx := context.Background()
+	sessionID, anonymousID, err := client.AnonymousLogin(ctx)
 	if err != nil {
 		t.Error(err)
 	}
 
-	_, err = customerID(sessionID, anonymousID, "test@test.co.uk")
+	_, err = client.CustomerID(ctx, sessionID, anonymousID, "test@test.co.uk")
 	if err != nil {
 		t.Error(err)
 	}

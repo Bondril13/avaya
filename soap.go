@@ -15,26 +15,27 @@ import (
 
 type Client struct {
 	baseURL string // e.g. http://avaya-server
+	Verbose bool
 }
 
 func NewClient(proto, host string) Client {
-	return Client{proto + "://" + host}
+	return Client{proto + "://" + host, false}
 }
 
 func (c Client) newCIUtilityWs() *CIUtilityWs.Soap {
-	return CIUtilityWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	return CIUtilityWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 }
 
 func (c Client) newCISkillset() *CISkillsetWs.Soap {
-	return CISkillsetWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	return CISkillsetWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 }
 
 func (c Client) newCIWebComms() *CIWebCommsWs.Soap {
-	return CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	return CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 }
 
 func (c Client) newCICustomerWs() *CICustomerWs.Soap {
-	return CICustomerWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	return CICustomerWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 }
 
 func (c Client) AnonymousLogin(ctx context.Context) (string, int64, error) {
@@ -135,7 +136,7 @@ func (c Client) RequestChat(ctx context.Context, customerID int64, sessionID str
 }
 
 func (c Client) ReadMessages(ctx context.Context, sessionKey string, contactID int64, isWriting bool, lastReadTime int64) (*CIWebCommsWs.CIMultipleChatMessageReadType, error) {
-	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 	resp, err := ciWebComms.ReadChatMessage(ctx, &CIWebCommsWs.ReadChatMessage{
 		ContactID: contactID,
 		IsWriting: isWriting,
@@ -150,7 +151,9 @@ func (c Client) ReadMessages(ctx context.Context, sessionKey string, contactID i
 	}
 
 	result := resp.ReadChatMessageResult
-	log.Println(resp)
+	if c.Verbose {
+		log.Println(resp)
+	}
 	return result, nil
 }
 
@@ -162,7 +165,7 @@ const (
 
 func (c Client) WriteMessage(ctx context.Context, sessionKey string, contactID int64, message string, msgType CIWebCommsWs.CIChatMessageType) error {
 
-	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{})
+	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 	resp, err := ciWebComms.WriteChatMessage(ctx, &CIWebCommsWs.WriteChatMessage{
 		ContactID:       contactID,
 		Message:         message,

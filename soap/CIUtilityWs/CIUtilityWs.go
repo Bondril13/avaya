@@ -425,9 +425,9 @@ type Soap struct {
 }
 
 // NewSoap -
-func NewSoap(baseURL string, tls bool, auth *soap.BasicAuth) *Soap {
+func NewSoap(baseURL string, tls bool, auth *soap.BasicAuth, verbose bool) *Soap {
 	url := baseURL + "/ccmmwebservices/CIUtilityWs.asmx"
-	client := soap.NewSOAPClient(url, tls, auth)
+	client := soap.NewSOAPClient(url, tls, auth, verbose)
 
 	return &Soap{
 		client: client,

@@ -3,7 +3,6 @@ package avaya
 import (
 	"context"
 	"log"
-	"time"
 )
 
 type requestChan (chan func())
@@ -12,9 +11,10 @@ type requestChan (chan func())
 // which all requests are performed sequentially on a wrapped conversation.
 // Not thread safe.
 type ThrottledConversation struct {
-	wrapped       Conversation
-	requests      requestChan
-	lastKeepAlive time.Time
+	wrapped  Conversation
+	requests requestChan
+	//	lastKeepAlive time.Time
+	verbose bool
 }
 
 func (tc *ThrottledConversation) queueRequest(ctx context.Context, f func()) error {
@@ -40,22 +40,23 @@ func (tc *ThrottledConversation) IsClosed() bool { return tc.wrapped.IsClosed() 
 
 // Keepalive - Keep chat active, and send "is typing" messages
 func (tc *ThrottledConversation) Keepalive(ctx context.Context, isTyping bool) error {
-	if sinceLast := time.Now().Sub(tc.lastKeepAlive).Seconds(); sinceLast < 10 {
-		log.Printf("Keepalive: Not bothering as last one was only %f seconds ago", sinceLast)
-		return nil
-	}
-
 	resp := make(chan error)
-	err := tc.queueRequest(ctx, func() {
+	if err := tc.queueRequest(ctx, func() {
 		defer close(resp)
 		resp <- tc.wrapped.Keepalive(ctx, isTyping)
-	})
-	if err != nil {
+	}); err != nil {
 		return err
 	}
-	err = <-resp
-	tc.lastKeepAlive = time.Now()
-	return err
+	return <-resp
+}
+
+func (tc *ThrottledConversation) Verbose(v bool) {
+	tc.verbose = v
+	tc.wrapped.Verbose(v)
+}
+
+func (tc *ThrottledConversation) IsAnswered() bool {
+	return tc.wrapped.IsAnswered()
 }
 
 // WriteMessage - Send chat message
@@ -98,7 +99,7 @@ func (tc *ThrottledConversation) Close(ctx context.Context) {
 	if tc.wrapped.IsClosed() {
 		return
 	}
-
+	defer tc.wrapped.Close(context.Background())
 	done := make(chan bool)
 
 	err := tc.queueRequest(ctx, func() {
@@ -142,7 +143,6 @@ func NewThrottle() *Throttle {
 				return
 			}
 			req()
-			time.Sleep(time.Second)
 		}
 	}()
 	return &Throttle{requests}

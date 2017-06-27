@@ -1,6 +1,8 @@
 package avaya
 
-import "context"
+import (
+	"context"
+)
 
 // Conversation - an avaya conversation
 type Conversation interface {
@@ -8,8 +10,10 @@ type Conversation interface {
 	WriteMessage(context.Context, string) error
 	ReadMessages(context.Context) (messages []Message, advisorTyping bool, err error)
 	Close(context.Context)
+	IsAnswered() bool
 	IsClosed() bool
 	Name() string
+	Verbose(bool)
 }
 
 // Message - a message from Avaya
