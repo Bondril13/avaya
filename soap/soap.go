@@ -20,7 +20,8 @@ var _ xml.Name
 var timeout = time.Duration(30 * time.Second)
 
 func dialTimeout(ctx context.Context, network, addr string) (net.Conn, error) {
-	ctx, _ = context.WithTimeout(ctx, timeout)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
 	d := net.Dialer{}
 	return d.DialContext(ctx, network, addr)
 }
@@ -187,7 +188,11 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			log.Printf("Problem closing SOAP response body: %v", err)
+		}
+	}()
 
 	rawbody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
