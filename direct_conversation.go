@@ -97,14 +97,16 @@ func (c *DirectConversation) Close(ctx context.Context) error {
 		log.Println("Close() answered")
 		if err := c.client.WriteMessage(ctx, c.sessionKey, c.contactID, "The customer has disconnected.", customerDisconnected); err != nil {
 			log.Println("Close(): failed to send disconnect message:", err)
+			return err
 		}
 	} else {
 		log.Println("Close() abandoning queue")
 		if err := c.client.AbandonQueue(ctx, c.sessionKey, c.contactID, "The conversation has ended."); err != nil {
 			log.Printf("Error abandoning queue: %v", err)
 		}
+		return c.client.EndSession(ctx, c.sessionKey, c.contactID)
 	}
-	return c.client.EndSession(ctx, c.sessionKey, c.contactID)
+	return nil
 }
 
 // IsAnswered - check if an advisor has answered this conversation
