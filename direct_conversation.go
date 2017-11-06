@@ -20,9 +20,13 @@ type DirectConversation struct {
 	verbose      bool
 }
 
+// CustomerID - returns the customer ID
 func (c *DirectConversation) CustomerID() int64 { return c.customerID }
-func (c *DirectConversation) Name() string      { return c.name }
 
+// Name - returns the customer name
+func (c *DirectConversation) Name() string { return c.name }
+
+// Keepalive - tells the AACC server that the client is still active, and if they are typing
 func (c *DirectConversation) Keepalive(ctx context.Context, isTyping bool) error {
 	if c.IsClosed() {
 		return fmt.Errorf("Conversation closed, not sending keep alive")
@@ -30,6 +34,7 @@ func (c *DirectConversation) Keepalive(ctx context.Context, isTyping bool) error
 	return c.client.KeepAlive(ctx, c.sessionKey, c.contactID, isTyping)
 }
 
+// WriteMessage - set a message to the AACC server
 func (c *DirectConversation) WriteMessage(ctx context.Context, message string) error {
 	if c.IsClosed() {
 		return fmt.Errorf("Conversation closed, not writing message")
@@ -37,6 +42,7 @@ func (c *DirectConversation) WriteMessage(ctx context.Context, message string) e
 	return c.client.WriteMessage(ctx, c.sessionKey, c.contactID, message, fromCustomer)
 }
 
+// ReadMessages - gets any unread message from the AACC server
 func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool, error) {
 	if c.closed {
 		return nil, false, fmt.Errorf("Conversation closed, not reading messages")
@@ -75,14 +81,16 @@ func (c *DirectConversation) ReadMessages(ctx context.Context) ([]Message, bool,
 	return messages, advisorTyping, nil
 }
 
-func (c *DirectConversation) Verbose(verbose bool) {
+// SetVerbose - enable more detailed logging
+func (c *DirectConversation) SetVerbose(verbose bool) {
 	c.verbose = verbose
 	c.client.Verbose = verbose
 }
 
-func (c *DirectConversation) Close(ctx context.Context) {
+// Close - end the conversation
+func (c *DirectConversation) Close(ctx context.Context) error {
 	if c.closed {
-		return
+		return nil
 	}
 	c.closed = true
 	if c.answered {
@@ -92,16 +100,20 @@ func (c *DirectConversation) Close(ctx context.Context) {
 		}
 	} else {
 		log.Println("Close() abandoning queue")
-		c.client.AbandonQue(ctx, c.sessionKey, c.contactID, "The conversation has ended.")
+		if err := c.client.AbandonQueue(ctx, c.sessionKey, c.contactID, "The conversation has ended."); err != nil {
+			log.Printf("Error abandoning queue: %v", err)
+		}
 	}
-	c.client.EndSession(ctx, c.sessionKey, c.contactID)
+	return c.client.EndSession(ctx, c.sessionKey, c.contactID)
 }
 
+// IsAnswered - check if an advisor has answered this conversation
 func (c *DirectConversation) IsAnswered() bool { return c.answered }
 
+// IsClosed - check if the conversation has already been ended
 func (c *DirectConversation) IsClosed() bool { return c.closed }
 
-// NewConversation - Creates a new Conversation
+// NewDirectConversation - Creates a new Conversation
 func NewDirectConversation(ctx context.Context, c Client, name, email, skillsetName string) (Conversation, error) {
 	sessionID, anonymousID, err := c.AnonymousLogin(ctx)
 	if err != nil {

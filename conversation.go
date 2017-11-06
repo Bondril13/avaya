@@ -9,11 +9,11 @@ type Conversation interface {
 	Keepalive(ctx context.Context, isTyping bool) error
 	WriteMessage(context.Context, string) error
 	ReadMessages(context.Context) (messages []Message, advisorTyping bool, err error)
-	Close(context.Context)
+	Close(context.Context) error
 	IsAnswered() bool
 	IsClosed() bool
 	Name() string
-	Verbose(bool)
+	SetVerbose(bool)
 }
 
 // Message - a message from Avaya

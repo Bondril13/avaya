@@ -50,11 +50,13 @@ func (tc *ThrottledConversation) Keepalive(ctx context.Context, isTyping bool) e
 	return <-resp
 }
 
-func (tc *ThrottledConversation) Verbose(v bool) {
+// SetVerbose - enable more detailed logging
+func (tc *ThrottledConversation) SetVerbose(v bool) {
 	tc.verbose = v
-	tc.wrapped.Verbose(v)
+	tc.wrapped.SetVerbose(v)
 }
 
+// IsAnswered - check if an advisor has answered the conversation yet
 func (tc *ThrottledConversation) IsAnswered() bool {
 	return tc.wrapped.IsAnswered()
 }
@@ -95,22 +97,25 @@ func (tc *ThrottledConversation) ReadMessages(ctx context.Context) ([]Message, b
 }
 
 // Close - close the wrapped conversation
-func (tc *ThrottledConversation) Close(ctx context.Context) {
+func (tc *ThrottledConversation) Close(ctx context.Context) error {
 	if tc.wrapped.IsClosed() {
-		return
+		return nil
 	}
-	defer tc.wrapped.Close(context.Background())
 	done := make(chan bool)
 
 	err := tc.queueRequest(ctx, func() {
 		defer close(done)
-		tc.wrapped.Close(ctx)
+		if err := tc.wrapped.Close(ctx); err != nil {
+			log.Printf("Problem closing throttled conversation: %v", err)
+		}
 		done <- true
 	})
 	if err != nil {
-		log.Printf("Problem closing conversation:", err)
+		log.Printf("Problem closing throttled conversation: %v", err)
+		return err
 	}
 	<-done
+	return nil
 }
 
 // Throttle - Executes queued requests sequentially to stop the server being overloaded

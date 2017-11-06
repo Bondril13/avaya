@@ -13,11 +13,13 @@ import (
 	"github.com/TheBookPeople/avaya/soap/CIWebCommsWs"
 )
 
+// Client - Avaya chat SOAP client
 type Client struct {
 	baseURL string // e.g. http://avaya-server
 	Verbose bool
 }
 
+// NewClient - creates a new Client
 func NewClient(proto, host string) Client {
 	return Client{proto + "://" + host, false}
 }
@@ -38,6 +40,7 @@ func (c Client) newCICustomerWs() *CICustomerWs.Soap {
 	return CICustomerWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 }
 
+// AnonymousLogin - login to the AACC server
 func (c Client) AnonymousLogin(ctx context.Context) (string, int64, error) {
 	ciUtil := c.newCIUtilityWs()
 	resp, err := ciUtil.GetAnonymousSessionKey(ctx, &CIUtilityWs.GetAnonymousSessionKey{})
@@ -51,6 +54,7 @@ func (c Client) AnonymousLogin(ctx context.Context) (string, int64, error) {
 	return resp.GetAnonymousSessionKeyResult.SessionKey, int64(anonymousID), nil
 }
 
+// KeepAlive - send a keepalive messsage to the AACC server
 func (c Client) KeepAlive(ctx context.Context, sessionID string, contactID int64, isTyping bool) error {
 	ciWebComms := c.newCIWebComms()
 	_, err := ciWebComms.UpdateAliveTimeAndUpdateIsTyping(ctx, &CIWebCommsWs.UpdateAliveTimeAndUpdateIsTyping{
@@ -62,6 +66,7 @@ func (c Client) KeepAlive(ctx context.Context, sessionID string, contactID int64
 	return err
 }
 
+// CustomerID - Get a customer ID for a given session
 func (c Client) CustomerID(ctx context.Context, sessionID string, anonymousID int64, email string) (int64, error) {
 
 	ciUtil := c.newCIUtilityWs()
@@ -85,6 +90,7 @@ func (c Client) CustomerID(ctx context.Context, sessionID string, anonymousID in
 	return resp.GetAndUpdateAnonymousCustomerIDResult, nil
 }
 
+// IsSkillsetInService - establish if a give n skillset is in use, e.g. an advisor is logged in
 func (c Client) IsSkillsetInService(ctx context.Context, skillsetName string) (bool, error) {
 	resp, err := c.newCISkillset().IsSkillsetNameInService(ctx, &CISkillsetWs.IsSkillsetNameInService{
 		SkillsetName: skillsetName,
@@ -95,11 +101,13 @@ func (c Client) IsSkillsetInService(ctx context.Context, skillsetName string) (b
 	return resp.IsSkillsetNameInServiceResult, nil
 }
 
+// Skillset - an AACC skillset (e.g. can handle orders, complaints etc..)
 type Skillset struct {
 	ID   int64
 	Name string
 }
 
+// Skillset - create a Skillset for a given name & session
 func (c Client) Skillset(ctx context.Context, sessionID, name string) (*Skillset, error) {
 	ciSkillset := c.newCISkillset()
 	resp, err := ciSkillset.GetSkillsetByName(ctx, &CISkillsetWs.GetSkillsetByName{
@@ -117,6 +125,7 @@ func (c Client) Skillset(ctx context.Context, sessionID, name string) (*Skillset
 	}, nil
 }
 
+// RequestChat - start a conversation
 func (c Client) RequestChat(ctx context.Context, customerID int64, sessionID string, skillsetID int64) (int64, error) {
 	ciCustomerWs := c.newCICustomerWs()
 
@@ -135,6 +144,7 @@ func (c Client) RequestChat(ctx context.Context, customerID int64, sessionID str
 	return resp.RequestTextChatResult, nil
 }
 
+// ReadMessages - read unread messages from the AACC server
 func (c Client) ReadMessages(ctx context.Context, sessionKey string, contactID int64, isWriting bool, lastReadTime int64) (*CIWebCommsWs.CIMultipleChatMessageReadType, error) {
 	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
 	resp, err := ciWebComms.ReadChatMessage(ctx, &CIWebCommsWs.ReadChatMessage{
@@ -163,6 +173,7 @@ const (
 	agentDisconnected    = CIWebCommsWs.CIChatMessageTypeSessionDisconnectedbyAgent
 )
 
+// WriteMessage - send a message to the AACC server
 func (c Client) WriteMessage(ctx context.Context, sessionKey string, contactID int64, message string, msgType CIWebCommsWs.CIChatMessageType) error {
 
 	ciWebComms := CIWebCommsWs.NewSoap(c.baseURL, false, &soap.BasicAuth{}, c.Verbose)
@@ -181,7 +192,8 @@ func (c Client) WriteMessage(ctx context.Context, sessionKey string, contactID i
 	return nil
 }
 
-func (c Client) AbandonQue(ctx context.Context, sessionKey string, contactID int64, reason string) error {
+// AbandonQueue - remove a session from the AACC chat queue
+func (c Client) AbandonQueue(ctx context.Context, sessionKey string, contactID int64, reason string) error {
 	ciWebComms := c.newCIWebComms()
 	_, err := ciWebComms.AbandonQueuingWebCommsContact(ctx, &CIWebCommsWs.AbandonQueuingWebCommsContact{
 		SessionKey:     sessionKey,
@@ -191,6 +203,7 @@ func (c Client) AbandonQue(ctx context.Context, sessionKey string, contactID int
 	return err
 }
 
+// EndSession - stop the conversation
 func (c Client) EndSession(ctx context.Context, sessionKey string, contactID int64) error {
 	ciUtil := c.newCIUtilityWs()
 	_, err := ciUtil.CustomerLogoffByContactID(ctx, &CIUtilityWs.CustomerLogoffByContactID{
