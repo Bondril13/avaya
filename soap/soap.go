@@ -184,6 +184,10 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 	}
 
 	client := &http.Client{Transport: tr}
+	t := time.Now()
+	if s.verbose {
+		log.Printf("SOAP call %s started...", soapAction)
+	}
 	res, err := client.Do(req)
 	if err != nil {
 		return err
@@ -194,6 +198,9 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 		}
 	}()
 
+	if s.verbose {
+		log.Printf("SOAP call %s... ended. Took %v", soapAction, time.Now().Sub(t))
+	}
 	rawbody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
