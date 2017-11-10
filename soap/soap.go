@@ -2,13 +2,10 @@ package soap
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/xml"
-	//	"fmt"
 	"context"
 	"io/ioutil"
 	"log"
-	"net"
 	"net/http"
 	"time"
 )
@@ -16,15 +13,6 @@ import (
 // against "unused imports"
 var _ time.Time
 var _ xml.Name
-
-var timeout = time.Duration(30 * time.Second)
-
-func dialTimeout(ctx context.Context, network, addr string) (net.Conn, error) {
-	ctx, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-	d := net.Dialer{}
-	return d.DialContext(ctx, network, addr)
-}
 
 type SOAPEnvelope struct {
 	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope"`
@@ -60,11 +48,12 @@ type BasicAuth struct {
 }
 
 type SOAPClient struct {
-	url     string
-	tls     bool
-	auth    *BasicAuth
-	header  interface{}
-	verbose bool
+	url        string
+	tls        bool
+	auth       *BasicAuth
+	header     interface{}
+	verbose    bool
+	httpClient *http.Client
 }
 
 func (b *SOAPBody) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -123,10 +112,11 @@ func (f SOAPFault) Error() string {
 
 func NewSOAPClient(url string, tls bool, auth *BasicAuth, verbose bool) *SOAPClient {
 	return &SOAPClient{
-		url:     url,
-		tls:     tls,
-		auth:    auth,
-		verbose: verbose,
+		url:        url,
+		tls:        tls,
+		auth:       auth,
+		verbose:    verbose,
+		httpClient: http.DefaultClient,
 	}
 }
 
@@ -176,19 +166,11 @@ func (s *SOAPClient) Call(ctx context.Context, soapAction string, request, respo
 	req.Header.Set("User-Agent", "gowsdl/0.1")
 	req.Close = true
 
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: s.tls,
-		},
-		DialContext: dialTimeout,
-	}
-
-	client := &http.Client{Transport: tr}
 	t := time.Now()
 	if s.verbose {
 		log.Printf("SOAP call %s started...", soapAction)
 	}
-	res, err := client.Do(req)
+	res, err := s.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
